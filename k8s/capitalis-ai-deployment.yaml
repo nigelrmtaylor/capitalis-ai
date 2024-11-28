@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: capitalis-ai
+  namespace: capitalis
   labels:
     app: capitalis-ai
 spec:
@@ -19,32 +20,52 @@ spec:
         image: nigelrmtaylor/capitalis-ai:master  # Replace ${DOCKER_USERNAME} with your Docker Hub username
         ports:
         - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: NUXT_HOST
+          value: "0.0.0.0"
+        - name: NUXT_PORT
+          value: "3000"
+        - name: NITRO_HOST
+          value: "0.0.0.0"
+        - name: NITRO_PORT
+          value: "3000"
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "200m"
+            memory: "256Mi"
           limits:
-            cpu: "500m"
+            cpu: "1000m"
             memory: "512Mi"
+        startupProbe:
+          tcpSocket:
+            port: 3000
+          failureThreshold: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
         readinessProbe:
-          httpGet:
-            path: /
+          tcpSocket:
             port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+          timeoutSeconds: 3
         livenessProbe:
-          httpGet:
-            path: /
+          tcpSocket:
             port: 3000
-          initialDelaySeconds: 15
+          initialDelaySeconds: 60
           periodSeconds: 20
+          failureThreshold: 3
+          timeoutSeconds: 3
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: capitalis-ai
+  namespace: capitalis
 spec:
-  type: LoadBalancer  # Change to ClusterIP if using an Ingress controller
+  type: ClusterIP  # Change to ClusterIP if using an Ingress controller
   ports:
     - port: 80
       targetPort: 3000

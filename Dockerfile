@@ -1,8 +1,14 @@
 FROM node:20-alpine
-
+000
 # Create app directory and set working environment
-# This is a Nuxt.js application running in production mode
 WORKDIR /app
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=3000
+ENV NITRO_HOST=0.0.0.0
+ENV NITRO_PORT=3000
 
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./

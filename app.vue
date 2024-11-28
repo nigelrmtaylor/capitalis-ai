@@ -92,34 +92,28 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useNuxtApp } from '#app'
 
 const leftDrawer = ref(false)
 const rightDrawer = ref(false)
-const onlineStatus = ref(navigator.onLine)
 const currentTime = ref('')
-const version = '1.0.0' // You can update this or fetch from your package.json
+const version = '1.0.0'
+
+const { $online } = useNuxtApp()
+const onlineStatus = $online
 
 // Update time every second
 const updateTime = () => {
   currentTime.value = new Date().toLocaleTimeString()
 }
 
-// Update online status
-const updateOnlineStatus = () => {
-  onlineStatus.value = navigator.onLine
-}
-
 // Set up event listeners
 onMounted(() => {
   updateTime()
   const timer = setInterval(updateTime, 1000)
-  window.addEventListener('online', updateOnlineStatus)
-  window.addEventListener('offline', updateOnlineStatus)
   
   onUnmounted(() => {
     clearInterval(timer)
-    window.removeEventListener('online', updateOnlineStatus)
-    window.removeEventListener('offline', updateOnlineStatus)
   })
 })
 </script>
