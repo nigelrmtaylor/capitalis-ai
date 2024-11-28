@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/capitalis-ai
+  IMAGE_NAME: capitalis-ai
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
             # Always tag with 'master' for pushes to master branch
             type=raw,value=master,enable=${{ github.ref == 'refs/heads/master' }}
