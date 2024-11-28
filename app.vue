@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useNuxtApp } from '#app'
 
 const leftDrawer = ref(false)
@@ -100,7 +100,7 @@ const currentTime = ref('')
 const version = '1.0.0'
 
 const { $online } = useNuxtApp()
-const onlineStatus = $online
+const onlineStatus = computed(() => $online.value)
 
 // Update time every second
 const updateTime = () => {

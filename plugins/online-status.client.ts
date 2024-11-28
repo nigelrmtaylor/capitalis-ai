@@ -17,7 +17,7 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      online: online
+      online
     }
   }
 })
