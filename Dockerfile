@@ -1,6 +1,7 @@
 FROM node:20-alpine
 
 # Create app directory and set working environment
+# This is a Nuxt.js application running in production mode
 WORKDIR /app
 
 # Copy package.json and yarn.lock
