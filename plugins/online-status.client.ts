@@ -3,7 +3,7 @@ import { ref } from 'vue'
 export default defineNuxtPlugin(() => {
   const online = ref(true)
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
     online.value = navigator.onLine
     
     window.addEventListener('online', () => {
