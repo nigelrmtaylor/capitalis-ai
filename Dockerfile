@@ -1,5 +1,5 @@
 FROM node:20-alpine
-000
+
 # Create app directory and set working environment
 WORKDIR /app
 
