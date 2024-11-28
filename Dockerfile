@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-# Create app directory
+# Create app directory and set working environment
 WORKDIR /app
 
 # Copy package.json and yarn.lock
