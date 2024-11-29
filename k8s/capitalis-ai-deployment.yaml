@@ -6,7 +6,7 @@ metadata:
   labels:
     app: capitalis-ai
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: capitalis-ai
