@@ -113,7 +113,7 @@ const version: string = '1.0.0'
 const commitTime: string = import.meta.env.VITE_COMMIT_TIME || 'Unknown'
 
 const { $online } = useNuxtApp()
-const onlineStatus = computed<boolean>(() => $online?.value ?? true)
+const onlineStatus = computed<boolean>(() => $online?.value ?? false)
 
 const { name } = useDisplay()
 const currentBreakpoint = computed(() => name.value.toUpperCase())
