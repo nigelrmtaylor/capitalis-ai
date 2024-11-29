@@ -85,6 +85,11 @@
           <v-icon size="small" color="orange" class="mr-1">mdi-memory</v-icon>
           <span class="text-caption">v{{ version }}</span>
         </v-col>
+
+        <v-col cols="auto" class="px-4">
+          <v-icon size="small" color="purple" class="mr-1">mdi-monitor-screenshot</v-icon>
+          <span class="text-caption">{{ currentBreakpoint }}</span>
+        </v-col>
       </v-row>
     </v-footer>
   </v-app>
@@ -92,25 +97,30 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import type { Ref } from 'vue'
 import { useNuxtApp } from '#app'
+import { useDisplay } from 'vuetify'
 
-const leftDrawer = ref(false)
-const rightDrawer = ref(false)
-const currentTime = ref('')
-const version = '1.0.0'
+const leftDrawer: Ref<boolean> = ref(false)
+const rightDrawer: Ref<boolean> = ref(false)
+const currentTime: Ref<string> = ref('')
+const version: string = '1.0.0'
 
 const { $online } = useNuxtApp()
-const onlineStatus = computed(() => $online.value)
+const onlineStatus = computed<boolean>(() => $online?.value ?? true)
+
+const { name } = useDisplay()
+const currentBreakpoint = computed(() => name.value.toUpperCase())
 
 // Update time every second
-const updateTime = () => {
+const updateTime = (): void => {
   currentTime.value = new Date().toLocaleTimeString()
 }
 
 // Set up event listeners
 onMounted(() => {
   updateTime()
-  const timer = setInterval(updateTime, 1000)
+  const timer: number = setInterval(updateTime, 1000)
   
   onUnmounted(() => {
     clearInterval(timer)
