@@ -10,6 +10,10 @@ ENV NUXT_PORT=3000
 ENV NITRO_HOST=0.0.0.0
 ENV NITRO_PORT=3000
 
+# Get commit time during build
+ARG COMMIT_TIME
+ENV VITE_COMMIT_TIME=$COMMIT_TIME
+
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 

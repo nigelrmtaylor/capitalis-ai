@@ -90,6 +90,11 @@
           <v-icon size="small" color="purple" class="mr-1">mdi-monitor-screenshot</v-icon>
           <span class="text-caption">{{ currentBreakpoint }}</span>
         </v-col>
+
+        <v-col cols="auto" class="px-4">
+          <v-icon size="small" color="blue" class="mr-1">mdi-source-commit</v-icon>
+          <span class="text-caption">{{ commitTime }}</span>
+        </v-col>
       </v-row>
     </v-footer>
   </v-app>
@@ -105,6 +110,7 @@ const leftDrawer: Ref<boolean> = ref(false)
 const rightDrawer: Ref<boolean> = ref(false)
 const currentTime: Ref<string> = ref('')
 const version: string = '1.0.0'
+const commitTime: string = import.meta.env.VITE_COMMIT_TIME || 'Unknown'
 
 const { $online } = useNuxtApp()
 const onlineStatus = computed<boolean>(() => $online?.value ?? true)
