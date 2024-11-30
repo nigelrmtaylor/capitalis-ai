@@ -106,6 +106,7 @@ import type { Ref } from 'vue'
 import { useNuxtApp } from '#app'
 import { useDisplay } from 'vuetify'
 
+console.log('in app.vue');
 const leftDrawer: Ref<boolean> = ref(false)
 const rightDrawer: Ref<boolean> = ref(false)
 const currentTime: Ref<string> = ref('')
