@@ -10,6 +10,8 @@ on:
 env:
   REGISTRY: docker.io
   IMAGE_NAME: capitalis-ai
+  VITE_APP_VERSION: ${{ github.ref_name }}
+  VITE_COMMIT_TIME: ${{ github.event.repository.updated_at }}
 
 jobs:
   build:
@@ -53,3 +55,4 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             VITE_APP_VERSION=${{ github.ref_name }}
+            VITE_COMMIT_TIME=${{ github.event.repository.updated_at }}
