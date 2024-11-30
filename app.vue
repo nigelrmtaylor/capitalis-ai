@@ -107,10 +107,17 @@ import { useNuxtApp } from '#app'
 import { useDisplay } from 'vuetify'
 
 console.log('in app.vue');
+
+// Add version tracking for cache debugging
+const APP_VERSION = '1.0.1';
+console.log('App Version:', APP_VERSION);
+console.log('Commit Time:', import.meta.env.VITE_COMMIT_TIME);
+console.log('Build Time:', new Date().toISOString());
+
 const leftDrawer: Ref<boolean> = ref(false)
 const rightDrawer: Ref<boolean> = ref(false)
 const currentTime: Ref<string> = ref('')
-const version: string = '1.0.0'
+const version: string = APP_VERSION
 const commitTime: string = import.meta.env.VITE_COMMIT_TIME || 'Unknown'
 
 const { $online } = useNuxtApp()
