@@ -7,6 +7,14 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  devServer: {
+    port: 4000,
+    host: '0.0.0.0'
+  },
+  nitro: {
+    port: 4000,
+    host: '0.0.0.0'
+  },
   pwa: {
     manifest: {
       name: 'Capitalis AI App',
