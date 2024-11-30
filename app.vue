@@ -109,7 +109,7 @@ import { useDisplay } from 'vuetify'
 console.log('in app.vue...');
 
 // Add version tracking for cache debugging
-const APP_VERSION = '1.0.3';
+const APP_VERSION = import.meta.env.VITE_APP_VERSION || 'unknown';
 console.log('App Version:', APP_VERSION);
 console.log('Commit Time:', import.meta.env.VITE_COMMIT_TIME);
 console.log('Build Time:', new Date().toISOString());

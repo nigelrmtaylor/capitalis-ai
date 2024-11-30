@@ -14,6 +14,10 @@ ENV NITRO_PORT=4000
 ARG COMMIT_TIME
 ENV VITE_COMMIT_TIME=$COMMIT_TIME
 
+# Get app version during build
+ARG VITE_APP_VERSION
+ENV VITE_APP_VERSION=$VITE_APP_VERSION
+
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 
