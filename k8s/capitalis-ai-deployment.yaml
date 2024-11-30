@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: capitalis-ai
-        image: nigelrmtaylor/capitalis-ai:v1.0.2  # Using version v1.0.2
+        image: nigelrmtaylor/capitalis-ai:v1.0.3  # Using version v1.0.3
         ports:
         - containerPort: 4000
         env:
