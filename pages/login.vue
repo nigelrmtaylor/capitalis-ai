@@ -12,9 +12,9 @@
                 Hanko API URL: {{ hankoApiUrl }}
               </div>
               <div style="height: 400px;">
-                <hanko-auth />
-              <hanko-events @onSessionCreated="afterLogin" />
-</div>
+                <hanko-auth @onAuthFlowCompleted="afterLogin()" />
+
+              </div>
             </v-card-text>
           </v-card>
         </ClientOnly>
@@ -38,6 +38,6 @@ definePageMeta({
 })
 
 function afterLogin() {
- navigateTo("/profile");
+  navigateTo("/profile");
 }
 </script>
