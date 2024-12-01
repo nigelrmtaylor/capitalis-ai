@@ -11,6 +11,11 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxtjs/hanko'
   ],
+  runtimeConfig: {
+    public: {
+      hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL,
+    }
+  },
   hanko: {
     apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL,
   },
@@ -98,11 +103,6 @@ export default defineNuxtConfig({
     },
     strategies: 'generateSW',
     injectRegister: 'auto'
-  },
-  runtimeConfig: {
-    public: {
-      hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL,
-    }
   },
   typescript: {
     strict: true
