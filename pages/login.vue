@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height">
+  <v-container fluid class="fill-height">
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6">
         <ClientOnly>
@@ -8,10 +8,13 @@
               Sign in to Capitalis AI
             </v-card-title>
             <v-card-text>
-              <div v-if="loading" class="text-center py-4">
-                <v-progress-circular indeterminate color="primary" />
+              <div class="text-caption mb-4">
+                Hanko API URL: {{ hankoApiUrl }}
               </div>
-              <HankoAuth v-else />
+              <div style="height: 400px;">
+                <hanko-auth />
+              <hanko-events @onSessionCreated="afterLogin" />
+</div>
             </v-card-text>
           </v-card>
         </ClientOnly>
@@ -25,12 +28,16 @@ defineOptions({
   ssr: false
 })
 
-const { isAuthenticated, loading } = useHanko()
+const config = useRuntimeConfig()
+const hankoApiUrl = config.public.hankoApi
 
-// Redirect to home if already authenticated
-watch(isAuthenticated, (value) => {
-  if (value) {
-    navigateTo('/')
-  }
+console.log('Hanko API URL:', hankoApiUrl)
+
+definePageMeta({
+  middleware: ['hanko-logged-out']
 })
+
+function afterLogin() {
+ navigateTo("/profile");
+}
 </script>

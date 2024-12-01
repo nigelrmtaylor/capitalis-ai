@@ -110,9 +110,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  middleware: ['auth']
-})
+
 
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import type { Ref } from 'vue'
