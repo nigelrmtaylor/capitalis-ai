@@ -119,7 +119,13 @@ const rightDrawer: Ref<boolean> = ref(false)
 const currentTime: Ref<string> = ref('')
 const version: string = APP_VERSION.replace(/^v/, '')
 const commitTime: string = import.meta.env.VITE_COMMIT_TIME ? 
-  new Date(import.meta.env.VITE_COMMIT_TIME).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 
+  new Date(import.meta.env.VITE_COMMIT_TIME).toLocaleString([], { 
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }) : 
   'Unknown'
 
 const { $online } = useNuxtApp()
