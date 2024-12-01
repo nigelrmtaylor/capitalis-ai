@@ -2,42 +2,48 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@vite-pwa/nuxt'],
-  css: ['vuetify/styles'],
+  css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css'],
   build: {
-    transpile: ['vuetify'],
+    transpile: [
+      'vuetify',
+      '@teamhanko/hanko-frontend-sdk',
+      '@teamhanko/hanko-elements'
+    ],
   },
+  modules: ['@vite-pwa/nuxt'],
+  plugins: [
+    { src: '~/plugins/hanko.client', mode: 'client' }
+  ],
   devServer: {
     port: 4000,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    https: true
   },
   nitro: {
     port: 4000,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    logLevel: 'debug',
+    debug: true,
+    https: true
   },
   pwa: {
     manifest: {
-      name: 'Capitalis AI App',
-      short_name: 'Capitalis',
-      description: 'A powerful AI-driven application',
+      name: 'Capitalis AI',
+      short_name: 'Capitalis AI',
+      description: 'Capitalis AI Application',
       theme_color: '#ffffff',
       icons: [
         {
-          src: 'icons/icon-64.png',
-          sizes: '64x64',
-          type: 'image/png'
+          src: 'pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
         },
         {
-          src: 'icons/icon-144.png',
-          sizes: '144x144',
-          type: 'image/png'
-        },
-        {
-          src: 'icons/icon-512.png',
+          src: 'pwa-512x512.png',
           sizes: '512x512',
-          type: 'image/png'
-        }
-      ]
+          type: 'image/png',
+        },
+      ],
     },
     workbox: {
       navigateFallback: '/',
@@ -48,5 +54,17 @@ export default defineNuxtConfig({
     public: {
       hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL || 'https://46f53e73-2fea-4501-a0a4-5b285614b775.hanko.io',
     }
+  },
+  app: {
+    head: {
+      title: 'Capitalis AI',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ]
+    }
+  },
+  typescript: {
+    strict: true
   }
 })

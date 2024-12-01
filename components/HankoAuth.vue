@@ -1,6 +1,8 @@
 <template>
   <div class="hanko-auth">
-    <hanko-auth />
+    <ClientOnly>
+      <hanko-auth />
+    </ClientOnly>
   </div>
 </template>
 
@@ -20,3 +22,9 @@
   --hanko-font-family: var(--font-family);
 }
 </style>
+
+<script setup lang="ts">
+defineOptions({
+  ssr: false
+})
+</script>

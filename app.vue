@@ -156,22 +156,29 @@ const onlineStatus = computed<boolean>(() => {
 const { name } = useDisplay()
 const currentBreakpoint = computed(() => name.value.toUpperCase())
 
-const { isAuthenticated, logout } = useHanko()
+const { isAuthenticated, logout, init, setupListeners } = useHanko()
 
-// Update time every second
-const updateTime = (): void => {
-  currentTime.value = new Date().toLocaleTimeString()
-}
-
-// Set up event listeners
+// Initialize authentication on app mount
 onMounted(() => {
+  try {
+    init()
+    setupListeners()
+  } catch (error) {
+    console.error('Failed to initialize authentication:', error)
+  }
+
   updateTime()
-  const timer: number = setInterval(updateTime, 1000)
+  const timer: ReturnType<typeof setInterval> = setInterval(updateTime, 1000)
   
   onUnmounted(() => {
     clearInterval(timer)
   })
 })
+
+// Update time every second
+const updateTime = (): void => {
+  currentTime.value = new Date().toLocaleTimeString()
+}
 </script>
 
 <style scoped>
