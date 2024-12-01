@@ -31,6 +31,8 @@ spec:
           value: "0.0.0.0"
         - name: NITRO_PORT
           value: "4000"
+        - name: NUXT_PUBLIC_HANKO_API_URL
+          value: "https://46f53e73-2fea-4501-a0a4-5b285614b775.hanko.io"
         resources:
           requests:
             cpu: "200m"
