@@ -52,7 +52,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     console.log('Runtime config loaded')
     
     const hankoApi = config.public.hankoApi
-    console.log('Hanko API URL:', hankoApi)
+    console.log('🔐 Hanko Plugin - API URL:', hankoApi)
+    console.log('Full runtime config:', config.public)
 
     if (!hankoApi) {
       throw new Error('Hanko API URL is not configured')

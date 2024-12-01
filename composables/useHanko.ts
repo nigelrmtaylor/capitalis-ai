@@ -36,11 +36,12 @@ export const useHanko = () => {
     
     if (!config.public.hankoApi) {
       const err = 'Hanko API URL is not configured'
-      console.error(err)
+      console.error(err, 'Runtime config:', config.public)
       error.value = err
       throw new Error(err)
     }
     
+    console.log('🔐 Using Hanko API URL:', config.public.hankoApi)
     return nuxtApp.$hanko
   }
 
