@@ -2,42 +2,42 @@ import { ref } from 'vue'
 
 export default defineNuxtPlugin(() => {
   console.log('Online Status Plugin - Initializing');
-  console.log('Window exists:', typeof window !== 'undefined');
-  console.log('Navigator exists:', typeof navigator !== 'undefined');
-  console.log('Navigator object:', navigator);
-  console.log('onLine property exists:', navigator && 'onLine' in navigator);
   
-  const online = ref(true)
+  const online = ref(true)  // Default to true
+  
+  // Function to check online status
+  const checkOnlineStatus = async () => {
+    try {
+      // Try to fetch a small resource to confirm connectivity
+      const response = await fetch('/favicon.ico', {
+        method: 'HEAD',
+        cache: 'no-cache'
+      });
+      online.value = response.ok;
+      console.log('Online status check result:', online.value);
+    } catch (error) {
+      console.log('Online status check failed:', error);
+      online.value = false;
+    }
+  };
 
-  if (typeof window !== 'undefined' && 
-      typeof navigator !== 'undefined' && 
-      'onLine' in navigator) {
+  if (typeof window !== 'undefined') {
+    // Initial check
+    checkOnlineStatus();
     
-    console.log('Setting initial online status:', navigator.onLine);
-    online.value = navigator.onLine
-    
+    // Set up event listeners
     window.addEventListener('online', () => {
       console.log('Online event triggered');
-      online.value = true
-    })
+      checkOnlineStatus();
+    });
     
     window.addEventListener('offline', () => {
       console.log('Offline event triggered');
-      online.value = false
-    })
-  } else {
-    console.log('Online status check skipped - missing required objects');
-  }
-
-  // Check for service worker
-  if ('serviceWorker' in navigator) {
-    console.log('Service Worker is available');
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-      console.log('Active Service Workers:', registrations.length);
-      registrations.forEach(registration => {
-        console.log('SW scope:', registration.scope);
-      });
+      online.value = false;
     });
+
+    // Periodic check every 30 seconds
+    setInterval(checkOnlineStatus, 30000);
   }
 
   return {
