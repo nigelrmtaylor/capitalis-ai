@@ -1,117 +1,73 @@
 <template>
-  <v-app>
-    <v-app-bar v-if="$route.path !== '/login'" color="primary">
-      <v-app-bar-nav-icon @click="leftDrawer = !leftDrawer"></v-app-bar-nav-icon>
-      <v-app-bar-title>Capitalis AI</v-app-bar-title>
-      <v-spacer></v-spacer>
-      <ClientOnly>
-        <v-btn v-if="isAuthenticated" @click="logout" prepend-icon="mdi-logout">
-          Logout
-        </v-btn>
-      </ClientOnly>
-      <v-btn icon @click="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-navigation-drawer
-      v-if="$route.path !== '/login'"
-      v-model="leftDrawer"
-      location="left"
-      temporary
-    >
-      <v-list>
-        <v-list-item
-          title="Home"
-          prepend-icon="mdi-home"
-          to="/"
-        ></v-list-item>
-        <v-list-item
-          title="Dashboard"
-          prepend-icon="mdi-view-dashboard"
-          to="/dashboard"
-        ></v-list-item>
-        <v-list-item
-          title="Settings"
-          prepend-icon="mdi-cog"
-          to="/settings"
-        ></v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-navigation-drawer
-      v-if="$route.path !== '/login'"
-      v-model="rightDrawer"
-      location="right"
-      temporary
-    >
-      <v-list>
-        <v-list-item
-          title="Profile"
-          prepend-icon="mdi-account"
-        ></v-list-item>
-        <v-list-item
-          title="Notifications"
-          prepend-icon="mdi-bell"
-        ></v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-main>
-      <v-container>
-        <NuxtPage />
-      </v-container>
-    </v-main>
-
-    <v-footer
-      app
-      class="bg-grey-lighten-1"
-    >
-      <v-row no-gutters>
-        <v-col cols="auto" class="mr-auto">
-          <span class="text-caption">&copy; {{ new Date().getFullYear() }} Capitalis AI</span>
-        </v-col>
-        
+  <NuxtLayout>
+    <v-app>
+      <v-app-bar v-if="$route.path !== '/login'" color="primary">
+        <v-app-bar-nav-icon @click="leftDrawer = !leftDrawer"></v-app-bar-nav-icon>
+        <v-app-bar-title>Capitalis AI</v-app-bar-title>
+        <v-spacer></v-spacer>
         <ClientOnly>
-          <v-col cols="auto" class="px-4">
-            <v-icon
-              :color="onlineStatus ? 'green' : 'red'"
-              size="small"
-              class="mr-1"
-            >
-              {{ onlineStatus ? 'mdi-cloud-check' : 'mdi-cloud-off-outline' }}
-            </v-icon>
-            <span class="text-caption">{{ onlineStatus ? 'Online' : 'Offline' }}</span>
-          </v-col>
+          <v-btn v-if="isAuthenticated" @click="logout" prepend-icon="mdi-logout">
+            Logout
+          </v-btn>
         </ClientOnly>
+        <v-btn icon @click="rightDrawer = !rightDrawer">
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
+      </v-app-bar>
 
-        <v-col cols="auto" class="px-4">
-          <v-icon size="small" color="blue" class="mr-1">mdi-clock-outline</v-icon>
-          <span class="text-caption">{{ currentTime }}</span>
-        </v-col>
+      <v-navigation-drawer
+        v-if="$route.path !== '/login'"
+        v-model="leftDrawer"
+        location="left"
+        temporary
+      >
+        <v-list>
+          <v-list-item
+            title="Home"
+            prepend-icon="mdi-home"
+            to="/"
+          ></v-list-item>
+          <v-list-item
+            title="Dashboard"
+            prepend-icon="mdi-view-dashboard"
+            to="/dashboard"
+          ></v-list-item>
+          <v-list-item
+            title="Settings"
+            prepend-icon="mdi-cog"
+            to="/settings"
+          ></v-list-item>
+        </v-list>
+      </v-navigation-drawer>
 
-        <v-col cols="auto" class="px-4">
-          <v-icon size="small" color="orange" class="mr-1">mdi-memory</v-icon>
-          <span class="text-caption">{{ version }}</span>
-        </v-col>
+      <v-navigation-drawer
+        v-if="$route.path !== '/login'"
+        v-model="rightDrawer"
+        location="right"
+        temporary
+      >
+        <v-list>
+          <v-list-item
+            title="Profile"
+            prepend-icon="mdi-account"
+          ></v-list-item>
+          <v-list-item
+            title="Notifications"
+            prepend-icon="mdi-bell"
+          ></v-list-item>
+        </v-list>
+      </v-navigation-drawer>
 
-        <v-col cols="auto" class="px-4">
-          <v-icon size="small" color="purple" class="mr-1">mdi-monitor-screenshot</v-icon>
-          <span class="text-caption">{{ currentBreakpoint }}</span>
-        </v-col>
-
-        <v-col cols="auto" class="px-4">
-          <v-icon size="small" color="blue" class="mr-1">mdi-source-commit</v-icon>
-          <span class="text-caption">{{ commitTime }}</span>
-        </v-col>
-      </v-row>
-    </v-footer>
-  </v-app>
+      <v-main>
+        <v-container>
+          <NuxtPage />
+        </v-container>
+      </v-main>
+    </v-app>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-
-
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import type { Ref } from 'vue'
 import { useNuxtApp } from '#app'
