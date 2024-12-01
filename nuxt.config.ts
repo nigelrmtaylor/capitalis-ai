@@ -16,18 +16,31 @@ export default defineNuxtConfig({
   },
 
   devServer: {
-    port: 4000,
-    host: '0.0.0.0',
-    https: true
   },
   nitro: {
     logLevel: 'debug',
-    debug: true
+    debug: true,
+    routeRules: {
+      '/**': { cors: true }
+    }
   },
-  server: {
-    port: 4000,
-    host: '0.0.0.0',
-    https: true
+  app: {
+    head: {
+      title: 'Capitalis AI',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ]
+    },
+    baseURL: '/',
+  },
+  vite: {
+    server: {
+      hmr: {
+        port: 4000,
+        host: '0.0.0.0'
+      }
+    }
   },
   pwa: {
     manifest: {
@@ -89,15 +102,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL || 'https://46f53e73-2fea-4501-a0a4-5b285614b775.hanko.io',
-    }
-  },
-  app: {
-    head: {
-      title: 'Capitalis AI',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ]
     }
   },
   typescript: {
