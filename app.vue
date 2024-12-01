@@ -1,15 +1,21 @@
 <template>
   <v-app>
-    <v-app-bar color="primary">
+    <v-app-bar v-if="$route.path !== '/login'" color="primary">
       <v-app-bar-nav-icon @click="leftDrawer = !leftDrawer"></v-app-bar-nav-icon>
       <v-app-bar-title>Capitalis AI</v-app-bar-title>
       <v-spacer></v-spacer>
+      <ClientOnly>
+        <v-btn v-if="isAuthenticated" @click="logout" prepend-icon="mdi-logout">
+          Logout
+        </v-btn>
+      </ClientOnly>
       <v-btn icon @click="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer
+      v-if="$route.path !== '/login'"
       v-model="leftDrawer"
       location="left"
       temporary
@@ -34,6 +40,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer
+      v-if="$route.path !== '/login'"
       v-model="rightDrawer"
       location="right"
       temporary
@@ -103,10 +110,15 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth']
+})
+
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import type { Ref } from 'vue'
 import { useNuxtApp } from '#app'
 import { useDisplay } from 'vuetify'
+import { useHanko } from '#imports'
 
 console.log('in app.vue...');
 
@@ -143,6 +155,8 @@ const onlineStatus = computed<boolean>(() => {
 
 const { name } = useDisplay()
 const currentBreakpoint = computed(() => name.value.toUpperCase())
+
+const { isAuthenticated, logout } = useHanko()
 
 // Update time every second
 const updateTime = (): void => {

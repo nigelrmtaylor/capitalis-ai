@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: capitalis-ai-test
+  namespace: capitalis
+spec:
+  selector:
+    app: capitalis-ai-test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4000
+  type: ClusterIP
