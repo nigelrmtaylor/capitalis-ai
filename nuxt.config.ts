@@ -101,7 +101,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL || 'https://46f53e73-2fea-4501-a0a4-5b285614b775.hanko.io',
+      hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL,
     }
   },
   typescript: {
