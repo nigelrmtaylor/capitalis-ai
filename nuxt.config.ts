@@ -14,11 +14,7 @@ export default defineNuxtConfig({
   hanko: {
     apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL,
   },
-  hooks: {
-    'app:created': () => {
-      console.log('Hanko API URL from env:', process.env.NUXT_PUBLIC_HANKO_API_URL)
-    }
-  },
+
   devServer: {
     port: 4000,
     host: '0.0.0.0',
