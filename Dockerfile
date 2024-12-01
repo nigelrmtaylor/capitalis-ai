@@ -19,14 +19,14 @@ ENV VITE_COMMIT_TIME=$VITE_COMMIT_TIME
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 
-# Install dependencies
-RUN yarn install
+# Install dependencies without running prepare script
+RUN yarn install --production=false --frozen-lockfile --ignore-scripts
 
 # Copy the rest of the application
 COPY . .
 
-# Build the application
-RUN yarn build
+# Run prepare and build
+RUN yarn nuxt prepare && yarn build
 
 # Expose the port the app runs on
 EXPOSE 4000
