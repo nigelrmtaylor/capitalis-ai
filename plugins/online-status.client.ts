@@ -1,45 +1,47 @@
 import { ref } from 'vue'
 
+/**
+ * Nuxt Plugin for Online Status Management
+ * 
+ * This plugin creates and manages the global online status state using navigator.onLine.
+ * It provides this state to the rest of the application through Nuxt's plugin system.
+ * Components can access this state using useNuxtApp().$online
+ */
 export default defineNuxtPlugin(() => {
-  console.log('Online Status Plugin - Initializing');
+  console.log('Online Status Plugin - Initializing')
   
-  const online = ref(true)  // Default to true
-  
-  // Function to check online status
-  const checkOnlineStatus = async () => {
-    try {
-      // Try to fetch a small resource to confirm connectivity
-      const response = await fetch('/favicon.ico', {
-        method: 'HEAD',
-        cache: 'no-cache'
-      });
-      online.value = response.ok;
-      console.log('Online status check result:', online.value);
-    } catch (error) {
-      console.log('Online status check failed:', error);
-      online.value = false;
-    }
-  };
+  // Create a reactive reference to track online status
+  const online = ref(true)
+  console.log('Initial ref value:', online.value)
 
-  if (typeof window !== 'undefined') {
-    // Initial check
-    checkOnlineStatus();
+  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+    // Set initial status from browser's navigator.onLine
+    const initialStatus = navigator.onLine
+    console.log('Browser reports online status:', initialStatus)
+    online.value = initialStatus
+    console.log('Set ref value to:', online.value)
     
-    // Set up event listeners
+    // Set up browser event listeners for online/offline events
     window.addEventListener('online', () => {
-      console.log('Online event triggered');
-      checkOnlineStatus();
-    });
+      console.log('Online event triggered - Current value:', online.value)
+      online.value = true
+      console.log('Set to true - New value:', online.value)
+    })
     
     window.addEventListener('offline', () => {
-      console.log('Offline event triggered');
-      online.value = false;
-    });
+      console.log('Offline event triggered - Current value:', online.value)
+      online.value = false
+      console.log('Set to false - New value:', online.value)
+    })
 
-    // Periodic check every 30 seconds
-    setInterval(checkOnlineStatus, 30000);
+    console.log('Online status event listeners registered')
+  } else {
+    console.log('Window or Navigator not available - Online status detection disabled')
   }
 
+  // Provide the online status to the rest of the application
+  // This can be accessed in components using useNuxtApp().$online
+  console.log('Providing online status with current value:', online.value)
   return {
     provide: {
       online

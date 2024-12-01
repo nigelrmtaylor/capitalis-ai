@@ -65,16 +65,18 @@
           <span class="text-caption">&copy; {{ new Date().getFullYear() }} Capitalis AI</span>
         </v-col>
         
-        <v-col cols="auto" class="px-4">
-          <v-icon
-            :color="onlineStatus ? 'green' : 'red'"
-            size="small"
-            class="mr-1"
-          >
-            {{ onlineStatus ? 'mdi-cloud-check' : 'mdi-cloud-off-outline' }}
-          </v-icon>
-          <span class="text-caption">{{ onlineStatus ? 'Online' : 'Offline' }}</span>
-        </v-col>
+        <ClientOnly>
+          <v-col cols="auto" class="px-4">
+            <v-icon
+              :color="onlineStatus ? 'green' : 'red'"
+              size="small"
+              class="mr-1"
+            >
+              {{ onlineStatus ? 'mdi-cloud-check' : 'mdi-cloud-off-outline' }}
+            </v-icon>
+            <span class="text-caption">{{ onlineStatus ? 'Online' : 'Offline' }}</span>
+          </v-col>
+        </ClientOnly>
 
         <v-col cols="auto" class="px-4">
           <v-icon size="small" color="blue" class="mr-1">mdi-clock-outline</v-icon>
@@ -128,8 +130,16 @@ const commitTime: string = import.meta.env.VITE_COMMIT_TIME ?
   }) : 
   'Unknown'
 
+// Access the online status from our plugin
+// This $online ref is provided by plugins/online-status.client.ts
 const { $online } = useNuxtApp()
-const onlineStatus = computed<boolean>(() => $online?.value ?? false)
+// Create a computed property to safely handle the online status
+// with a fallback to false if $online is undefined
+const onlineStatus = computed<boolean>(() => {
+  const status = $online?.value ?? false
+  console.log('Online status computed:', status, '$online value:', $online?.value)
+  return status
+})
 
 const { name } = useDisplay()
 const currentBreakpoint = computed(() => name.value.toUpperCase())
