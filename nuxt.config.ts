@@ -21,10 +21,12 @@ export default defineNuxtConfig({
     https: true
   },
   nitro: {
+    logLevel: 'debug',
+    debug: true
+  },
+  server: {
     port: 4000,
     host: '0.0.0.0',
-    logLevel: 'debug',
-    debug: true,
     https: true
   },
   pwa: {
