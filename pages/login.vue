@@ -5,7 +5,7 @@
         <ClientOnly>
           <v-card class="elevation-12">
             <v-card-title class="text-center text-h5 py-4">
-              Sign in to Capitalis AI
+              Sign in to Capitalis AI.
             </v-card-title>
             <v-card-text>
               <div class="text-caption mb-4">
