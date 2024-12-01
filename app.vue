@@ -83,7 +83,7 @@
 
         <v-col cols="auto" class="px-4">
           <v-icon size="small" color="orange" class="mr-1">mdi-memory</v-icon>
-          <span class="text-caption">v{{ version }}</span>
+          <span class="text-caption">{{ version }}</span>
         </v-col>
 
         <v-col cols="auto" class="px-4">
@@ -117,8 +117,10 @@ console.log('Build Time:', new Date().toISOString());
 const leftDrawer: Ref<boolean> = ref(false)
 const rightDrawer: Ref<boolean> = ref(false)
 const currentTime: Ref<string> = ref('')
-const version: string = APP_VERSION
-const commitTime: string = import.meta.env.VITE_COMMIT_TIME || 'Unknown'
+const version: string = APP_VERSION.replace(/^v/, '')
+const commitTime: string = import.meta.env.VITE_COMMIT_TIME ? 
+  new Date(import.meta.env.VITE_COMMIT_TIME).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 
+  'Unknown'
 
 const { $online } = useNuxtApp()
 const onlineStatus = computed<boolean>(() => $online?.value ?? false)
