@@ -12,6 +12,7 @@ env:
   IMAGE_NAME: capitalis-ai
   VITE_APP_VERSION: ${{ github.ref_name }}
   VITE_COMMIT_TIME: ${{ github.event.repository.updated_at }}
+  VITE_GIT_COMMIT: ${{ github.sha }}
 
 jobs:
   build:
@@ -41,6 +42,7 @@ jobs:
           images: docker.io/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=master,enable=${{ github.ref == 'refs/heads/master' }}
+            type=raw,value=${{ github.sha }},enable=${{ github.ref == 'refs/heads/master' }}
             type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/tags/') }}
             type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/') }}
 
@@ -56,3 +58,4 @@ jobs:
           build-args: |
             VITE_APP_VERSION=${{ github.ref_name }}
             VITE_COMMIT_TIME=${{ github.event.repository.updated_at }}
+            VITE_GIT_COMMIT=${{ github.sha }}
