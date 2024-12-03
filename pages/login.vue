@@ -12,7 +12,7 @@
                 Hanko API URL: {{ hankoApi }}
               </div>
               <div style="height: 400px;">
-                <hanko-auth @onAuthFlowCompleted="afterLogin()" />
+                <hanko-auth @onAuthSuccess="afterLogin()" />
 
               </div>
             </v-card-text>
