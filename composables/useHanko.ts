@@ -1,12 +1,14 @@
 import { Hanko } from '@teamhanko/hanko-elements'
 import { ref } from 'vue'
+import { useRuntimeConfig } from '#imports'
 
 export const useHanko = () => {
   const hankoInstance = ref<Hanko | null>(null)
 
   const initHanko = () => {
     if (!hankoInstance.value) {
-      const hankoApi = process.env.NUXT_PUBLIC_HANKO_API_URL
+      const config = useRuntimeConfig()
+      const hankoApi = config.public.hankoApi
       if (!hankoApi) {
         throw new Error('Hanko API URL not configured')
       }
