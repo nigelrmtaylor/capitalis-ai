@@ -43,8 +43,10 @@ defineOptions({
 })
 
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useHanko } from '#imports'
 
+const router = useRouter()
 const loading = ref(true)
 const userEmail = ref('')
 const hanko = useHanko()
@@ -63,7 +65,7 @@ onMounted(async () => {
 async function logout() {
   try {
     await hanko?.user.logout()
-    navigateTo('/login')
+    router.push('/login')
   } catch (error) {
     console.error('Error during logout:', error)
   }
