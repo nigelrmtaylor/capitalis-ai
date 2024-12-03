@@ -15,9 +15,11 @@
             <v-btn color="primary" size="large" class="mx-2">
               Get Started
             </v-btn>
-            <v-btn color="secondary" size="large" class="mx-2" @click="navigateTo('/login')">
-              Login
-            </v-btn>
+            <NuxtLink to="/login">
+              <v-btn color="secondary" size="large" class="mx-2">
+                Login
+              </v-btn>
+            </NuxtLink>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -26,10 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'nuxt/app'
-
 // Component logic here
-const { navigateTo } = useRouter()
 </script>
 
 <style scoped>
