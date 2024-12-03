@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: capitalis-ai
-        image: nigelrmtaylor/capitalis-ai:latest  # Using latest tag
+        image: nigelrmtaylor/capitalis-ai@sha256:b457a2d8908f5dea112f24c2fbf746758f4da6aadd196268d740b19a523497c9  # Using master tag digest
         ports:
         - containerPort: 4000
         env:

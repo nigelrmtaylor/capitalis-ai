@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   modules: ['@vite-pwa/nuxt'],
   runtimeConfig: {
     public: {
-      hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL,
+      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
     }
   },
   devServer: {

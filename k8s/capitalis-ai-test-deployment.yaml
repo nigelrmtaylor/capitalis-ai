@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: capitalis-ai-test
-        image: nigelrmtaylor/capitalis-ai:master
+        image: nigelrmtaylor/capitalis-ai@sha256:6d082282a49dd558837e3ec3ca1521eedbb67dd9089e2854a2ca119397b03ff2
         imagePullPolicy: Always
         ports:
         - containerPort: 4000

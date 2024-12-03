@@ -9,13 +9,13 @@ export const useHanko = () => {
     if (!hankoInstance.value) {
       const config = useRuntimeConfig()
       console.log('Runtime config:', config) 
-      const hankoApi = config.public.NUXT_PUBLIC_HANKO_API_URL
-      if (!hankoApi) {
+      const hankoApiUrl = config.public.NUXT_PUBLIC_HANKO_API_URL
+      if (!hankoApiUrl) {
         console.error('Hanko API URL not found in config:', config) 
         throw new Error('Hanko API URL not configured')
       }
-      console.log('Using Hanko API URL:', hankoApi) 
-      hankoInstance.value = new Hanko(hankoApi)
+      console.log('Using Hanko API URL:', hankoApiUrl) 
+      hankoInstance.value = new Hanko({api:hankoApiUrl})
     }
     return hankoInstance.value
   }
