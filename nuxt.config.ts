@@ -7,16 +7,12 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  modules: ['@vite-pwa/nuxt', '@nuxtjs/hanko'],
+  modules: ['@vite-pwa/nuxt'],
   runtimeConfig: {
     public: {
       hankoApi: process.env.NUXT_PUBLIC_HANKO_API_URL,
     }
   },
-  hanko: {
-    apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL,
-  },
-
   devServer: {
   },
   nitro: {

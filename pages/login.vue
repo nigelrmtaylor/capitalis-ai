@@ -9,7 +9,7 @@
             </v-card-title>
             <v-card-text>
               <div class="text-caption mb-4">
-                Hanko API URL: {{ hankoApiUrl }}
+                Hanko API URL: {{ hankoApi }}
               </div>
               <div style="height: 400px;">
                 <hanko-auth @onAuthFlowCompleted="afterLogin()" />
@@ -24,20 +24,23 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'nuxt/app'
+
 defineOptions({
   ssr: false
 })
 
 const config = useRuntimeConfig()
-const hankoApiUrl = config.public.hankoApi
+const hankoApi = config.public.hankoApi
+const router = useRouter()
 
-console.log('Hanko API URL:', hankoApiUrl)
+console.log('Hanko API URL:', hankoApi)
 
 definePageMeta({
   middleware: ['hanko-logged-out']
 })
 
 function afterLogin() {
-  navigateTo("/profile");
+  router.push("/profile")
 }
 </script>
