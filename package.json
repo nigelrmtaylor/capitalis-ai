@@ -15,14 +15,16 @@
   "devDependencies": {
     "@mdi/font": "^7.3.67",
     "@nuxt/devtools": "latest",
-    "@nuxtjs/hanko": "^0.7.0",
+    "@nuxtjs/hanko": "0.7.0",
     "@types/node": "^20.8.9",
     "@vite-pwa/nuxt": "^0.1.1",
     "nuxt": "^3.8.0",
     "sass": "^1.69.5",
     "typescript": "^5.2.2",
     "vite-plugin-vuetify": "^1.0.2",
-    "vue-tsc": "^1.8.22",
+    "vue-tsc": "^1.8.22"
+  },
+  "resolutions": {
     "@teamhanko/hanko-elements": "1.2.0"
   }
 }
