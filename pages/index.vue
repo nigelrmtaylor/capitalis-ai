@@ -12,8 +12,11 @@
             </p>
           </v-card-text>
           <v-card-actions class="justify-center pb-6">
-            <v-btn color="primary" size="large">
+            <v-btn color="primary" size="large" class="mx-2">
               Get Started
+            </v-btn>
+            <v-btn color="secondary" size="large" class="mx-2" to="/login">
+              Login
             </v-btn>
           </v-card-actions>
         </v-card>
