@@ -6,9 +6,9 @@ WORKDIR /app
 # Set environment variables
 ENV NODE_ENV=production
 ENV NUXT_HOST=0.0.0.0
-ENV NUXT_PORT=4000
+ENV NUXT_PORT=3000
 ENV NITRO_HOST=0.0.0.0
-ENV NITRO_PORT=4000
+ENV NITRO_PORT=3000
 
 # Get app version and commit time during build
 ARG VITE_APP_VERSION
@@ -31,7 +31,7 @@ COPY . .
 RUN yarn nuxt prepare && yarn build
 
 # Expose the port the app runs on
-EXPOSE 4000
+EXPOSE 3000
 
 # Start the application
 CMD ["node", ".output/server/index.mjs"]

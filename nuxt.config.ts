@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import vue from '@vitejs/plugin-vue'
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-11-01',
@@ -35,10 +36,19 @@ export default defineNuxtConfig({
   vite: {
     server: {
       hmr: {
-        port: 4000,
+        port: 3000,
         host: '0.0.0.0'
       }
-    }
+    },
+    plugins: [
+      vue({
+      template: {
+          compilerOptions: {
+            isCustomElement: (tag) => tag.startsWith("hanko-")
+          }
+      }
+      })
+   ]
   },
   pwa: {
     manifest: {
