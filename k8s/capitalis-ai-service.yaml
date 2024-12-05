@@ -7,7 +7,7 @@ spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: 4000
+      targetPort: 3000
       protocol: TCP
   selector:
     app: capitalis-ai
