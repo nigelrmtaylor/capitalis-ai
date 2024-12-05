@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vue from '@vitejs/plugin-vue'
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-11-01',
@@ -39,40 +38,31 @@ export default defineNuxtConfig({
         port: 3000,
         host: '0.0.0.0'
       }
-    },
-    plugins: [
-      vue({
-      template: {
-          compilerOptions: {
-            isCustomElement: (tag) => tag.startsWith("hanko-")
-          }
-      }
-      })
-   ]
+    }
   },
   pwa: {
     manifest: {
-      name: 'Capitalis AI',
-      short_name: 'Capitalis AI',
+      name: 'Capitalis AI App',
+      short_name: 'Capitalis',
       description: 'Capitalis AI Application',
       theme_color: '#ffffff',
       icons: [
         {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
+          src: 'icon.png',
           sizes: '512x512',
-          type: 'image/png',
-        },
-      ],
+          type: 'image/png'
+        }
+      ]
     },
     workbox: {
       navigateFallback: '/',
-      globPatterns: ['**/*.{js,css,html}'],
-      globDirectory: 'public',
+      globDirectory: '.output/public',
+      globPatterns: ['**/*.{js,css,html,png,jpg,jpeg,svg,ico}'],
+      globIgnores: [
+        '**/node_modules/**/*',
+        'sw.js',
+        'workbox-*.js'
+      ],
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
