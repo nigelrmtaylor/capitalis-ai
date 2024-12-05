@@ -16,9 +16,9 @@
               Get Started
             </v-btn>
             <NuxtLink to="/login">
-              <v-btn color="secondary" size="large" class="mx-2">
-                Login
-              </v-btn>
+                 
+                  Login
+              
             </NuxtLink>
           </v-card-actions>
         </v-card>

@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  modules: ['@vite-pwa/nuxt'],
+  modules: ['@vite-pwa/nuxt','@nigelrmtaylor/hanko-nuxt-module'],
   runtimeConfig: {
     public: {
       hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
@@ -21,6 +21,17 @@ export default defineNuxtConfig({
     routeRules: {
       '/**': { cors: true }
     }
+  },
+  hanko: {
+    // You need to provide the Hanko API URL in order for it to work
+    apiURL: '',
+    cookieName: 'hanko',
+    redirects: {
+      login: '/login', // this is the default
+      home: '/', // this is the default
+      success: '/user', // this is a custom redirect
+      followRedirect: true, // this can be set to false to always redirect to the success page
+    },
   },
   app: {
     head: {

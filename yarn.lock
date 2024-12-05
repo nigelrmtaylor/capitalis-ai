@@ -1334,6 +1334,17 @@
     "@netlify/node-cookies" "^0.1.0"
     urlpattern-polyfill "8.0.2"
 
+"@nigelrmtaylor/hanko-nuxt-module@0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@nigelrmtaylor/hanko-nuxt-module/-/hanko-nuxt-module-0.7.1.tgz#6658e6cc96daa71dac3b0fb997aca795c6c2ca0a"
+  integrity sha512-Xgt3c8zn4nSaN2/errSD26ZJziBO6YFbPGsQlAccKWB1i3bdPf9ulyUk5HqsqSfW73yuIbsFBA5bNS2phnInVQ==
+  dependencies:
+    "@nuxt/kit" "^3.13.0"
+    "@teamhanko/hanko-elements" "1.2.0"
+    defu "^6.1.4"
+    jose "^5.8.0"
+    ufo "^1.5.4"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -1578,7 +1589,7 @@
     which "^3.0.1"
     ws "^8.18.0"
 
-"@nuxt/kit@3.14.1592", "@nuxt/kit@^3.13.1", "@nuxt/kit@^3.14.1592", "@nuxt/kit@^3.8.2":
+"@nuxt/kit@3.14.1592", "@nuxt/kit@^3.13.0", "@nuxt/kit@^3.13.1", "@nuxt/kit@^3.14.1592", "@nuxt/kit@^3.8.2":
   version "3.14.1592"
   resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.14.1592.tgz#f959a269424c1ee313585a46112e474b6ccab3bc"
   integrity sha512-r9r8bISBBisvfcNgNL3dSIQHSBe0v5YkX5zwNblIC2T0CIEgxEVoM5rq9O5wqgb5OEydsHTtT2hL57vdv6VT2w==
@@ -2074,7 +2085,7 @@
     magic-string "^0.25.0"
     string.prototype.matchall "^4.0.6"
 
-"@teamhanko/hanko-elements@^1.2.0":
+"@teamhanko/hanko-elements@1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@teamhanko/hanko-elements/-/hanko-elements-1.2.0.tgz#4cef52ccf4c7b4512fab6450b3043a73b8f34bfa"
   integrity sha512-fyoMWey6dw6q+/B/0jem9xpw8EpVHOXeuMOaD6xaEnSQn3EP2U9M3WLFBB+PJZhWO8u2WzXopS3f3HD7RFv2Ig==
@@ -4712,6 +4723,11 @@ jiti@^2.1.2, jiti@^2.3.0, jiti@^2.3.1, jiti@^2.4.0:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-2.4.1.tgz#4de9766ccbfa941d9b6390d2b159a4b295a52e6b"
   integrity sha512-yPBThwecp1wS9DmoA4x4KR2h3QoslacnDR8ypuFM962kI4/456Iy1oHx2RAgh4jfZNdn0bctsdadceiBUgpU1g==
+
+jose@^5.8.0:
+  version "5.9.6"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.9.6.tgz#77f1f901d88ebdc405e57cce08d2a91f47521883"
+  integrity sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==
 
 js-levenshtein@^1.1.6:
   version "1.1.6"

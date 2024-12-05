@@ -9,10 +9,10 @@
             </v-card-title>
             <v-card-text>
               <div class="text-caption mb-4">
-                Hanko API URL: {{ hankoApi }}
+                Hanko API URL: {{ hankoApiUrl }}
               </div>
               <div style="height: 400px;">
-                <hanko-auth @onAuthSuccess="afterLogin()" />
+                <capitalis-auth @onAuthSuccess="afterLogin()" />
 
               </div>
             </v-card-text>
@@ -31,14 +31,12 @@ defineOptions({
 })
 
 const config = useRuntimeConfig()
-const hankoApi = config.public.hankoApi
+const hankoApiUrl = config.public.hankoApiUrl
 const router = useRouter()
 
-console.log('Hanko API URL:', hankoApi)
+console.log('Hanko API URL:', hankoApiUrl)
 
-definePageMeta({
-  middleware: ['hanko-logged-out']
-})
+
 
 function afterLogin() {
   router.push("/profile")
