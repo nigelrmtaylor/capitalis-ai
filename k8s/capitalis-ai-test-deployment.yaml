@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: capitalis-ai-test
-        image: nigelrmtaylor/capitalis-ai@sha256:0698924374347820b3f9c58dbd47988c2fb8efd21b269dedc10cd812c85c4cda
+        image: nigelrmtaylor/capitalis-ai:master
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -39,6 +39,8 @@ spec:
           value: "3000"
         - name: NUXT_PUBLIC_HANKO_API_URL
           value: "https://5359da63-4600-4493-a24b-4be38f253ea6.hanko.io"
+        - name: VITE_COMMIT_TIME
+          value: "2023-12-08T14:30:00Z"
         resources:
           requests:
             cpu: "200m"

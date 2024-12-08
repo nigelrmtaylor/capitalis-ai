@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capitalis-graphql
+  labels:
+    app: capitalis-graphql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capitalis-graphql
+  template:
+    metadata:
+      labels:
+        app: capitalis-graphql
+    spec:
+      containers:
+      - name: capitalis-graphql
+        image: nigelrmtaylor/capitalis-graphql:master
+        ports:
+        - containerPort: 5687
+        env:
+        - name: DATABASE_URL
+          value: "postgres://postgres:postgres@postgres:5432/postgres"  # You'll need to update this with your actual DB credentials
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capitalis-graphql-service
+spec:
+  selector:
+    app: capitalis-graphql
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5687
+  type: LoadBalancer

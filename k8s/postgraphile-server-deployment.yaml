@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgraphile-server
+  namespace: capitalis
+  labels:
+    app: postgraphile-server
+  annotations:
+    kubernetes.io/change-cause: "Initial deployment of PostGraphile server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgraphile-server
+  template:
+    metadata:
+      labels:
+        app: postgraphile-server
+    spec:
+      containers:
+      - name: postgraphile-server
+        image: nigelrmtaylor/capitalis-graphql:master
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5678
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: url
+        - name: JWKS_URI
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: JWKS_URI
+        - name: AUDIENCE
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: AUDIENCE
+        - name: ISSUER
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: ISSUER
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        readinessProbe:
+          tcpSocket:
+            port: 5678
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 5678
+          initialDelaySeconds: 15
+          periodSeconds: 10

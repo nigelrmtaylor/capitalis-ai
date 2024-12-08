@@ -7,10 +7,24 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  modules: ['@vite-pwa/nuxt','@nigelrmtaylor/hanko-nuxt-module'],
+  modules: [
+    '@vite-pwa/nuxt',
+    '@nigelrmtaylor/hanko-nuxt-module',
+    '@nuxtjs/apollo'
+  ],
+  apollo: {
+    clients: {
+      default: {
+        httpEndpoint: process.env.GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
+        wsEndpoint: process.env.GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
+      }
+    }
+  },
   runtimeConfig: {
     public: {
       hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
+      graphqlUrl: process.env.GRAPHQL_URL,
+      graphqlWsUrl: process.env.GRAPHQL_WS_URL
     }
   },
   devServer: {
