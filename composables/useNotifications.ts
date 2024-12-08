@@ -1,38 +1,41 @@
 export const useNotifications = () => {
+  const config = useRuntimeConfig()
+  
   const isSupported = () => {
-    return 'Notification' in window && 'serviceWorker' in navigator
+    return typeof window !== 'undefined' && 'OneSignal' in window
   }
 
   const requestPermission = async () => {
     if (!isSupported()) {
-      console.warn('Notifications are not supported')
+      console.warn('OneSignal is not supported')
       return false
     }
 
     try {
-      const permission = await Notification.requestPermission()
-      return permission === 'granted'
+      const permission = await window.OneSignal.Notifications.requestPermission()
+      return permission
     } catch (error) {
-      console.error('Error requesting notification permission:', error)
+      console.error('Error requesting OneSignal notification permission:', error)
       return false
     }
   }
 
-  const showNotification = async (title: string, options: NotificationOptions = {}) => {
+  const showNotification = async (title: string, options: any = {}) => {
     if (!isSupported()) {
-      console.warn('Notifications are not supported')
+      console.warn('OneSignal is not supported')
       return
     }
 
-    const registration = await navigator.serviceWorker.ready
     try {
-      await registration.showNotification(title, {
-        icon: '/icon.png',
-        badge: '/icon.png',
-        ...options,
+      await window.OneSignal.Notifications.create({
+        title,
+        message: options.body,
+        icon: options.icon || '/icon.png',
+        url: options.url || window.location.origin,
+        ...options
       })
     } catch (error) {
-      console.error('Error showing notification:', error)
+      console.error('Error showing OneSignal notification:', error)
     }
   }
 
