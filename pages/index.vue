@@ -8,7 +8,7 @@
           </v-card-title>
           <v-card-text class="text-center">
             <p class="text-body-1 mt-4">
-              Your powerful AI-driven application (Updated Dec 3)
+              Your powerful AI-driven application (Updated Dec 8)
             </p>
           </v-card-text>
           <v-card-actions class="justify-center pb-6">
