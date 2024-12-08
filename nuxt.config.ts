@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   modules: [
     '@vite-pwa/nuxt',
     '@nigelrmtaylor/hanko-nuxt-module',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    () => import('@nuxtjs/onesignal')
   ],
   apollo: {
     clients: {
@@ -20,11 +21,23 @@ export default defineNuxtConfig({
       }
     }
   },
+  oneSignal: {
+    cdn: true,
+    init: {
+      appId: '217eb07a-530e-4fb0-b333-0a5b27bf16fd',
+      allowLocalhostAsSecureOrigin: true,
+      welcomeNotification: {
+        disable: false
+      }
+    }
+  },
   runtimeConfig: {
     public: {
       hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
       graphqlUrl: process.env.GRAPHQL_URL,
-      graphqlWsUrl: process.env.GRAPHQL_WS_URL
+      graphqlWsUrl: process.env.GRAPHQL_WS_URL,
+      notificationServerUrl: process.env.NOTIFICATION_SERVER_URL || 'http://localhost:3001',
+      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY
     }
   },
   devServer: {
@@ -77,6 +90,19 @@ export default defineNuxtConfig({
           sizes: '512x512',
           type: 'image/png'
         }
+      ],
+      display: 'standalone',
+      background_color: '#ffffff',
+      start_url: '/',
+      scope: '/',
+      orientation: 'portrait',
+      categories: ['business', 'finance'],
+      shortcuts: [
+        {
+          name: 'Dashboard',
+          url: '/dashboard',
+          description: 'View your dashboard'
+        }
       ]
     },
     workbox: {
@@ -116,11 +142,30 @@ export default defineNuxtConfig({
               statuses: [0, 200]
             }
           }
+        },
+        {
+          urlPattern: /\/api\/.*/i,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'api-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 5 // Cache for 5 minutes
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
         }
       ]
     },
     strategies: 'generateSW',
-    injectRegister: 'auto'
+    injectRegister: 'auto',
+    registerType: 'autoUpdate',
+    devOptions: {
+      enabled: true,
+      type: 'module'
+    }
   },
   typescript: {
     strict: true

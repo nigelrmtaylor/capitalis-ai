@@ -27,6 +27,7 @@
   "dependencies": {
     "@nigelrmtaylor/hanko-nuxt-module": "0.7.1",
     "@nuxtjs/apollo": "5.0.0-alpha.7",
+    "@nuxtjs/onesignal": "3.0.0-rc.13",
     "@vue/apollo-composable": "^4.0.1",
     "express": "^4.21.2",
     "graphql": "^16.8.1",
