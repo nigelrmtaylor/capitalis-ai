@@ -11,7 +11,7 @@ env:
   REGISTRY: docker.io
   IMAGE_NAME: capitalis-ai
   VITE_APP_VERSION: ${{ github.ref_name }}
-  VITE_COMMIT_TIME: ${{ github.event.head_commit.timestamp }}
+  VITE_COMMIT_TIME: ${{ github.event.head_commit.timestamp || github.event.repository.pushed_at }}
   VITE_GIT_COMMIT: ${{ github.sha }}
 
 jobs:
@@ -57,5 +57,5 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             VITE_APP_VERSION=${{ github.ref_name }}
-            VITE_COMMIT_TIME=${{ github.event.head_commit.timestamp }}
+            VITE_COMMIT_TIME=${{ github.event.head_commit.timestamp || github.event.repository.pushed_at }}
             VITE_GIT_COMMIT=${{ github.sha }}
