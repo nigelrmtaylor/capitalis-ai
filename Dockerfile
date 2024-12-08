@@ -25,18 +25,18 @@ COPY package.json yarn.lock ./
 RUN yarn config set registry https://registry.npmjs.org/ && \
     for i in 1 2 3 4 5; do \
       echo "Attempt $i: Installing dependencies..." && \
-      yarn install --production=false --ignore-scripts && break || \
+      yarn install --production=false && break || \
       echo "Attempt $i failed" && sleep 5; \
     done
 
 # Copy the rest of the application
 COPY . .
 
-# Run prepare and build
-RUN yarn nuxt prepare && yarn build
+# Build the application
+RUN yarn build
 
-# Expose the port the app runs on
+# Expose the listening port
 EXPOSE 3000
 
-# Start the application
-CMD ["yarn", "start"]
+# Start the application using the generated output
+CMD ["node", ".output/server/index.mjs"]
