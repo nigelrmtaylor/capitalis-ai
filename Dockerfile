@@ -21,8 +21,13 @@ ENV VITE_GIT_COMMIT=$VITE_GIT_COMMIT
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 
-# Install dependencies without running prepare script
-RUN yarn install --production=false --ignore-scripts
+# Set npm registry and install dependencies with retries
+RUN yarn config set registry https://registry.npmjs.org/ && \
+    for i in 1 2 3 4 5; do \
+      echo "Attempt $i: Installing dependencies..." && \
+      yarn install --production=false --ignore-scripts && break || \
+      echo "Attempt $i failed" && sleep 5; \
+    done
 
 # Copy the rest of the application
 COPY . .
@@ -34,4 +39,4 @@ RUN yarn nuxt prepare && yarn build
 EXPOSE 3000
 
 # Start the application
-CMD ["node", ".output/server/index.mjs"]
+CMD ["yarn", "start"]
