@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nigelrmtaylor/hanko-nuxt-module',
     '@nuxtjs/apollo',
-    () => import('@nuxtjs/onesignal')
+    '@nuxtjs/onesignal'
   ],
   apollo: {
     clients: {
