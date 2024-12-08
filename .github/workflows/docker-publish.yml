@@ -12,6 +12,11 @@ env:
   IMAGE_NAME: capitalis-ai
   VITE_APP_VERSION: ${{ github.ref_name }}
   VITE_GIT_COMMIT: ${{ github.sha }}
+  NUXT_PUBLIC_ONESIGNAL_REST_API_KEY: ${{ secrets.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY }}
+  NUXT_PUBLIC_HANKO_API_URL: ${{ secrets.NUXT_PUBLIC_HANKO_API_URL }}
+  GRAPHQL_URL: ${{ secrets.GRAPHQL_URL }}
+  GRAPHQL_WS_URL: ${{ secrets.GRAPHQL_WS_URL }}
+  NOTIFICATION_SERVER_URL: ${{ secrets.NOTIFICATION_SERVER_URL }}
 
 jobs:
   build:
@@ -62,3 +67,8 @@ jobs:
             VITE_APP_VERSION=${{ github.ref_name }}
             VITE_COMMIT_TIME=${{ env.BUILD_TIME }}
             VITE_GIT_COMMIT=${{ github.sha }}
+            NUXT_PUBLIC_ONESIGNAL_REST_API_KEY=${{ secrets.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY }}
+            NUXT_PUBLIC_HANKO_API_URL=${{ secrets.NUXT_PUBLIC_HANKO_API_URL }}
+            GRAPHQL_URL=${{ secrets.GRAPHQL_URL }}
+            GRAPHQL_WS_URL=${{ secrets.GRAPHQL_WS_URL }}
+            NOTIFICATION_SERVER_URL=${{ secrets.NOTIFICATION_SERVER_URL }}
