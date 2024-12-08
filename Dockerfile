@@ -25,7 +25,7 @@ COPY package.json yarn.lock ./
 RUN yarn config set registry https://registry.npmjs.org/ && \
     for i in 1 2 3 4 5; do \
       echo "Attempt $i: Installing dependencies..." && \
-      yarn install --production=false && break || \
+      yarn install --frozen-lockfile && break || \
       echo "Attempt $i failed" && sleep 5; \
     done
 
