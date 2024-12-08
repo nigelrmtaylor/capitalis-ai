@@ -22,7 +22,7 @@ ENV VITE_GIT_COMMIT=$VITE_GIT_COMMIT
 COPY package.json yarn.lock ./
 
 # Install dependencies without running prepare script
-RUN yarn install --production=false --frozen-lockfile --ignore-scripts
+RUN yarn install --production=false --ignore-scripts
 
 # Copy the rest of the application
 COPY . .
