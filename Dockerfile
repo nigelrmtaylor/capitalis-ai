@@ -21,13 +21,8 @@ ENV VITE_GIT_COMMIT=$VITE_GIT_COMMIT
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
 
-# Set npm registry and install dependencies with retries
-RUN yarn config set registry https://registry.npmjs.org/ && \
-    for i in 1 2 3 4 5; do \
-      echo "Attempt $i: Installing dependencies..." && \
-      yarn install --frozen-lockfile && break || \
-      echo "Attempt $i failed" && sleep 5; \
-    done
+# Install dependencies without running prepare script
+RUN yarn install --production=false --frozen-lockfile --ignore-scripts
 
 # Copy the rest of the application
 COPY . .
