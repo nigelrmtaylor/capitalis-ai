@@ -23,11 +23,15 @@ export default defineNuxtConfig({
   },
   oneSignal: {
     cdn: true,
+    importScripts: true,
     init: {
       appId: '217eb07a-530e-4fb0-b333-0a5b27bf16fd',
       allowLocalhostAsSecureOrigin: true,
       welcomeNotification: {
         disable: false
+      },
+      notifyButton: {
+        enable: true
       }
     }
   },
