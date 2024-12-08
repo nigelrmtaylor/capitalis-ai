@@ -4,14 +4,39 @@ export const useOneSignal = () => {
   const isSubscribed = ref(false)
   const userId = ref<string | null>(null)
 
+  const initializeOneSignal = async () => {
+    if (process.client && window.OneSignal === undefined) {
+      const script = document.createElement('script')
+      script.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js'
+      script.async = true
+      document.head.appendChild(script)
+
+      await new Promise((resolve) => {
+        script.onload = resolve
+      })
+    }
+
+    if (window.OneSignal) {
+      window.OneSignal.push(() => {
+        window.OneSignal.init({
+          appId: '217eb07a-530e-4fb0-b333-0a5b27bf16fd',
+          allowLocalhostAsSecureOrigin: true,
+          serviceWorkerPath: '/OneSignalSDKWorker.js',
+          welcomeNotification: {
+            disable: false
+          }
+        })
+      })
+    }
+  }
+
   onMounted(async () => {
+    await initializeOneSignal()
+    
     if (window.OneSignal) {
       isSupported.value = true
       
       try {
-        // Initialize OneSignal
-        await window.OneSignal.init()
-        
         // Check subscription status
         const state = await window.OneSignal.getNotificationPermission()
         isSubscribed.value = state === 'granted'
@@ -50,7 +75,10 @@ export const useOneSignal = () => {
   }
 
   const sendNotification = async (title: string, message: string, url?: string) => {
-    if (!userId.value) return false
+    if (!config.public.oneSignalRestApiKey) {
+      console.error('OneSignal REST API key not configured')
+      return
+    }
 
     try {
       const response = await fetch('https://onesignal.com/api/v1/notifications', {
@@ -61,17 +89,20 @@ export const useOneSignal = () => {
         },
         body: JSON.stringify({
           app_id: '217eb07a-530e-4fb0-b333-0a5b27bf16fd',
-          include_player_ids: [userId.value],
           contents: { en: message },
           headings: { en: title },
-          url
+          url: url || window.location.origin,
+          included_segments: ['Subscribed Users']
         })
       })
 
-      return response.ok
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      return await response.json()
     } catch (error) {
       console.error('Error sending notification:', error)
-      return false
     }
   }
 

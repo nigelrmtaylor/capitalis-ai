@@ -10,28 +10,13 @@ export default defineNuxtConfig({
   modules: [
     '@vite-pwa/nuxt',
     '@nigelrmtaylor/hanko-nuxt-module',
-    '@nuxtjs/apollo',
-    '@nuxtjs/onesignal'
+    '@nuxtjs/apollo'
   ],
   apollo: {
     clients: {
       default: {
         httpEndpoint: process.env.GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
         wsEndpoint: process.env.GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
-      }
-    }
-  },
-  oneSignal: {
-    cdn: true,
-    importScripts: true,
-    init: {
-      appId: '217eb07a-530e-4fb0-b333-0a5b27bf16fd',
-      allowLocalhostAsSecureOrigin: true,
-      welcomeNotification: {
-        disable: false
-      },
-      notifyButton: {
-        enable: true
       }
     }
   },
@@ -111,13 +96,8 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
-      globDirectory: '.output/public',
       globPatterns: ['**/*.{js,css,html,png,jpg,jpeg,svg,ico}'],
-      globIgnores: [
-        '**/node_modules/**/*',
-        'sw.js',
-        'workbox-*.js'
-      ],
+      globIgnores: ['**/OneSignalSDKWorker.js'],
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -160,14 +140,30 @@ export default defineNuxtConfig({
               statuses: [0, 200]
             }
           }
+        },
+        {
+          urlPattern: /^https:\/\/cdn\.onesignal\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'onesignal-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
         }
       ]
     },
-    strategies: 'generateSW',
-    injectRegister: 'auto',
-    registerType: 'autoUpdate',
+    client: {
+      installPrompt: true,
+      periodicSyncForUpdates: 20
+    },
     devOptions: {
       enabled: true,
+      suppressWarnings: true,
       type: 'module'
     }
   },

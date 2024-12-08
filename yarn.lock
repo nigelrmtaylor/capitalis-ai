@@ -1462,18 +1462,6 @@
     jiti "^1.18.2"
     ohash "^1.0.0"
 
-"@nuxtjs/onesignal@3.0.0-beta.16":
-  version "3.0.0-beta.16"
-  resolved "https://registry.npmjs.org/@nuxtjs/onesignal/-/onesignal-3.0.0-beta.16.tgz#88d31653c99308949c9551446746b39356a03cdc"
-  integrity sha512-wQViakFeEz21cz+WsRuJ+uKoxjmzT8w2CRr1FrzjZn8K4R4jqKWT7qP96YnxFHIR1/YErP+P22MkzNzawMNcUQ==
-  dependencies:
-    "@nuxtjs/pwa-utils" "3.0.0-beta.16"
-
-"@nuxtjs/pwa-utils@3.0.0-beta.16":
-  version "3.0.0-beta.16"
-  resolved "https://registry.npmjs.org/@nuxtjs/pwa-utils/-/pwa-utils-3.0.0-beta.16.tgz#808ddb090f3831c5b32931ab2d08231cc55abff9"
-  integrity sha512-3sF8iAstLi/dbQ39S4Zdy/QsK5IArgJ2s/nuGxOTVuxz01m07VdMbJejzsdYbyz31mQP0w4IPFNYOCPZhcvVig==
-
 "@parcel/watcher-android-arm64@2.5.0":
   version "2.5.0"
   resolved "https://registry.npmjs.org/@parcel/watcher-android-arm64/-/watcher-android-arm64-2.5.0.tgz#e32d3dda6647791ee930556aee206fcd5ea0fb7a"
