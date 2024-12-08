@@ -55,7 +55,7 @@ const commitHash = import.meta.env.VITE_GIT_COMMIT || ''
 const version = ref('v1.0.0')
 const onlineStatus = ref(navigator.onLine)
 const currentTime = ref(new Date().toLocaleTimeString())
-const commitTime = ref(new Date().toLocaleString())
+const commitTime = ref(import.meta.env.VITE_COMMIT_TIME || 'Unknown')
 
 const { name: currentBreakpoint } = useDisplay()
 
