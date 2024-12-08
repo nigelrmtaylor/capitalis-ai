@@ -47,6 +47,16 @@ export default defineNuxtPlugin((nuxtApp) => {
             return false
           }
         },
+        async getUserId() {
+          if (!window.OneSignal) return null
+          try {
+            const deviceId = await window.OneSignal.User.PushSubscription.id
+            return deviceId
+          } catch (error) {
+            console.error('Error getting OneSignal user ID:', error)
+            return null
+          }
+        },
         async createNotification(options: { title: string; message: string; url?: string; icon?: string }) {
           if (!window.OneSignal) return
           try {
@@ -58,6 +68,36 @@ export default defineNuxtPlugin((nuxtApp) => {
             })
           } catch (error) {
             console.error('Error creating OneSignal notification:', error)
+          }
+        },
+        async sendToUser(userId: string, options: { title: string; message: string; url?: string; icon?: string }) {
+          if (!window.OneSignal) return
+          try {
+            const restApiKey = config.public.oneSignalRestApiKey
+            const response = await fetch('https://onesignal.com/api/v1/notifications', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${restApiKey}`
+              },
+              body: JSON.stringify({
+                app_id: appId,
+                include_player_ids: [userId],
+                headings: { en: options.title },
+                contents: { en: options.message },
+                url: options.url || window.location.origin,
+                chrome_web_icon: options.icon || '/icon.png',
+                firefox_icon: options.icon || '/icon.png'
+              })
+            })
+            const result = await response.json()
+            if (!response.ok) {
+              throw new Error(result.errors?.[0] || 'Failed to send notification')
+            }
+            return result
+          } catch (error) {
+            console.error('Error sending OneSignal notification to user:', error)
+            throw error
           }
         }
       }
