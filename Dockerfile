@@ -27,8 +27,11 @@ RUN yarn install --production=false --frozen-lockfile --ignore-scripts
 # Copy the rest of the application
 COPY . .
 
-# Build the application
+# Build the application with PWA support
 RUN yarn build
+
+# Ensure OneSignal service worker is in the correct location
+RUN cp public/OneSignalSDKWorker.js .output/public/
 
 # Expose the listening port
 EXPOSE 3000
