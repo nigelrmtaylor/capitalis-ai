@@ -25,18 +25,17 @@
 
 <script setup lang="ts">
 import { useRouter } from 'nuxt/app'
-import { useHanko } from '@nigelrmtaylor/hanko-nuxt-module'
+import { useRuntimeConfig } from '#app'
 
 defineOptions({
   ssr: false
 })
 
 const config = useRuntimeConfig()
-const hanko = useHanko()
-const hankoApiUrl = hanko.apiURL
+const hankoApiUrl = config.public.hankoApiUrl
 const router = useRouter()
 
-console.log('Hanko API URL from module:', hankoApiUrl)
+console.log('Hanko API URL from config:', hankoApiUrl)
 
 
 
