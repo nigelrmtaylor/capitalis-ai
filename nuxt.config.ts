@@ -4,7 +4,7 @@ console.log('Environment variables during config initialization:')
 console.log('NUXT_PUBLIC_HANKO_API_URL:', process.env.NUXT_PUBLIC_HANKO_API_URL)
 console.log('All env:', process.env)
 
-export default defineNuxtConfig({
+const config = defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
@@ -18,25 +18,25 @@ export default defineNuxtConfig({
   modules: [
     '@vite-pwa/nuxt',
     ['@nigelrmtaylor/hanko-nuxt-module', {
-      apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL || ''
+      apiURL: ''
     }],
     '@nuxtjs/apollo'
   ],
   apollo: {
     clients: {
       default: {
-        httpEndpoint: process.env.GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
-        wsEndpoint: process.env.GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
+        httpEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
+        wsEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
       }
     }
   },
   runtimeConfig: {
     public: {
-      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL || '',
-      graphqlUrl: process.env.GRAPHQL_URL || '',
-      graphqlWsUrl: process.env.GRAPHQL_WS_URL || '',
-      notificationServerUrl: process.env.NOTIFICATION_SERVER_URL || 'http://localhost:3001',
-      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY || ''
+      hankoApiUrl: '',
+      graphqlUrl: '',
+      graphqlWsUrl: '',
+      notificationServerUrl: '',
+      oneSignalRestApiKey: ''
     }
   },
   devServer: {
@@ -190,3 +190,5 @@ export default defineNuxtConfig({
     strict: true
   }
 })
+
+export default config
