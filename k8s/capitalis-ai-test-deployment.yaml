@@ -38,7 +38,10 @@ spec:
         - name: NITRO_PORT
           value: "3000"
         - name: NUXT_PUBLIC_HANKO_API_URL
-          value: "https://5359da63-4600-4493-a24b-4be38f253ea6.hanko.io"
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: NUXT_PUBLIC_HANKO_API_URL
         - name: VITE_COMMIT_TIME
           value: "2023-12-08T14:30:00Z"
         resources:
