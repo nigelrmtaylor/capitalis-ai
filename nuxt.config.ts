@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV !== 'production' },
+  experimental: {
+    payloadExtraction: false
+  },
   css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css'],
   build: {
     transpile: ['vuetify'],
@@ -36,7 +39,17 @@ export default defineNuxtConfig({
     debug: true,
     routeRules: {
       '/**': { cors: true }
-    }
+    },
+    prerender: {
+      crawlLinks: true,
+      routes: ['/']
+    },
+    publicAssets: [
+      {
+        dir: 'public',
+        baseURL: '/'
+      }
+    ]
   },
   hanko: {
     // You need to provide the Hanko API URL in order for it to work
@@ -50,21 +63,14 @@ export default defineNuxtConfig({
     },
   },
   app: {
+    baseURL: '/',
+    buildAssetsDir: '/_nuxt/',
     head: {
       title: 'Capitalis AI',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ]
-    },
-    baseURL: '/',
-  },
-  vite: {
-    server: {
-      hmr: {
-        port: 3000,
-        host: '0.0.0.0'
-      }
     }
   },
   pwa: {
@@ -91,9 +97,47 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
-      globPatterns: ['**/*.{js,css,html,png,jpg,jpeg,svg,ico}'],
-      globIgnores: ['**/OneSignalSDKWorker.js'],
+      globDirectory: '.output/public',
+      globPatterns: [
+        '**/*.{js,css,html,ico,png,svg}',
+        '_nuxt/**/*'
+      ],
+      globIgnores: [
+        '**/OneSignalSDKWorker.js',
+        '**/node_modules/**',
+        'sw.js',
+        'workbox-*.js'
+      ],
+      modifyURLPrefix: {
+        '/_nuxt/Users/NigelTaylor/GitHub/CascadeProjects/windsurf-project/capitalis-ai-app/node_modules/nuxt/dist/app/': '/_nuxt/'
+      },
       runtimeCaching: [
+        {
+          urlPattern: '/',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'pages'
+          }
+        },
+        {
+          urlPattern: ({ url }) => {
+            const path = url.pathname;
+            // Remove absolute path if present
+            const normalizedPath = path.replace(/.*\/_nuxt\//, '/_nuxt/');
+            return normalizedPath.startsWith('/_nuxt/');
+          },
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'nuxt-assets',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 24 * 60 * 60
+            },
+            matchOptions: {
+              ignoreSearch: true
+            }
+          }
+        },
         {
           urlPattern: /^https:\/\/cdn\.onesignal\.com\/.*/i,
           handler: 'CacheFirst',
@@ -102,17 +146,38 @@ export default defineNuxtConfig({
             expiration: {
               maxEntries: 10,
               maxAgeSeconds: 60 * 60 * 24 * 30
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
             }
           }
         }
       ]
     },
+    client: {
+      installPrompt: true
+    },
     devOptions: {
       enabled: true,
+      suppressWarnings: true,
       type: 'module'
+    }
+  },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: '_nuxt/[name].js',
+          chunkFileNames: '_nuxt/[name].js',
+          assetFileNames: '_nuxt/[name][extname]'
+        }
+      }
+    },
+    plugins: [
+      (await import('./plugins/vite-path-normalize')).default()
+    ],
+    server: {
+      hmr: {
+        port: 3000,
+        host: '0.0.0.0'
+      }
     }
   },
   typescript: {
