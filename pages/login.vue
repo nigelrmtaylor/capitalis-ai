@@ -31,10 +31,12 @@ defineOptions({
 })
 
 const config = useRuntimeConfig()
-const hankoApiUrl = config.public.hankoApiUrl
+const hankoApiUrl = config.public.hankoApiUrl || process.env.NUXT_PUBLIC_HANKO_API_URL
 const router = useRouter()
 
-console.log('Hanko API URL:', hankoApiUrl)
+console.log('Hanko API URL from config:', config.public.hankoApiUrl)
+console.log('Hanko API URL from env:', process.env.NUXT_PUBLIC_HANKO_API_URL)
+console.log('Final Hanko API URL:', hankoApiUrl)
 
 
 

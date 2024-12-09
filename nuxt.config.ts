@@ -12,7 +12,9 @@ export default defineNuxtConfig({
   },
   modules: [
     '@vite-pwa/nuxt',
-    '@nigelrmtaylor/hanko-nuxt-module',
+    ['@nigelrmtaylor/hanko-nuxt-module', {
+      apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL
+    }],
     '@nuxtjs/apollo'
   ],
   apollo: {
@@ -53,7 +55,6 @@ export default defineNuxtConfig({
   },
   hanko: {
     // You need to provide the Hanko API URL in order for it to work
-    apiURL: '',
     cookieName: 'hanko',
     redirects: {
       login: '/login', // this is the default
