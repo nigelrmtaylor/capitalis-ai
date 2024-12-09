@@ -6,7 +6,7 @@ metadata:
   labels:
     app: postgraphile-server
   annotations:
-    kubernetes.io/change-cause: "Initial deployment of PostGraphile server"
+    kubernetes.io/change-cause: "Update JWT environment variables"
 spec:
   replicas: 1
   selector:
@@ -21,8 +21,6 @@ spec:
       - name: postgraphile-server
         image: nigelrmtaylor/capitalis-graphql:master
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5678
         env:
         - name: DATABASE_URL
           valueFrom:
@@ -34,16 +32,23 @@ spec:
             secretKeyRef:
               name: jwt-secret
               key: JWKS_URI
-        - name: AUDIENCE
+        - name: JWT_AUDIENCE
           valueFrom:
             secretKeyRef:
               name: jwt-secret
-              key: AUDIENCE
-        - name: ISSUER
-          valueFrom:
-            secretKeyRef:
-              name: jwt-secret
-              key: ISSUER
+              key: JWT_AUDIENCE
+        ports:
+        - containerPort: 5678
+        livenessProbe:
+          tcpSocket:
+            port: 5678
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 5678
+          initialDelaySeconds: 10
+          periodSeconds: 5
         resources:
           requests:
             cpu: "100m"
@@ -51,13 +56,3 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
-        readinessProbe:
-          tcpSocket:
-            port: 5678
-          initialDelaySeconds: 10
-          periodSeconds: 5
-        livenessProbe:
-          tcpSocket:
-            port: 5678
-          initialDelaySeconds: 15
-          periodSeconds: 10
