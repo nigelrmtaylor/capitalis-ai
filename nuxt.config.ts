@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+console.log('Environment variables during config initialization:')
+console.log('NUXT_PUBLIC_HANKO_API_URL:', process.env.NUXT_PUBLIC_HANKO_API_URL)
+console.log('All env:', process.env)
+
 export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2024-11-01',
@@ -13,7 +18,7 @@ export default defineNuxtConfig({
   modules: [
     '@vite-pwa/nuxt',
     ['@nigelrmtaylor/hanko-nuxt-module', {
-      apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL
+      apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL || ''
     }],
     '@nuxtjs/apollo'
   ],
@@ -27,11 +32,11 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
-      graphqlUrl: process.env.GRAPHQL_URL,
-      graphqlWsUrl: process.env.GRAPHQL_WS_URL,
+      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL || '',
+      graphqlUrl: process.env.GRAPHQL_URL || '',
+      graphqlWsUrl: process.env.GRAPHQL_WS_URL || '',
       notificationServerUrl: process.env.NOTIFICATION_SERVER_URL || 'http://localhost:3001',
-      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY
+      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY || ''
     }
   },
   devServer: {
