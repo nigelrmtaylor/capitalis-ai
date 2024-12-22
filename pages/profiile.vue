@@ -5,6 +5,8 @@ definePageMeta({
 </script>
 
 <template>
+
+  This is the profile ß
   <hanko-profile />
   <LogoutButton />
 </template>

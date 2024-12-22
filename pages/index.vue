@@ -1,3 +1,8 @@
+<script setup lang="ts">
+// Component logic here
+</script>
+
+
 <template>
   <v-container>
     <v-row justify="center" align="center">
@@ -42,9 +47,6 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
-// Component logic here
-</script>
 
 <style scoped>
 /* Component styles here */

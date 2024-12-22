@@ -2,8 +2,9 @@
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { register } from "@teamhanko/hanko-elements";
+const config = useRuntimeConfig()
+const hankoApi = config.public.hankoApiUrl;
 
-const hankoApi = import.meta.env.VITE_HANKO_API_URL;
 
 const router = useRouter();
 
@@ -23,5 +24,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <hanko-auth @onSessionCreated="redirectAfterLogin" />
+ ddd {{ hankoApi }}ddd
+ <hr/>
+  www<hanko-auth />www
 </template>

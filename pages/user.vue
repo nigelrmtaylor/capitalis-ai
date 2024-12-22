@@ -1,3 +1,45 @@
+
+<script setup lang="ts">
+definePageMeta({
+  middleware: ['hanko-logged-in'],
+})
+
+defineOptions({
+  ssr: false
+})
+
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useHanko } from '#imports'
+
+const router = useRouter()
+const loading = ref(true)
+const userEmail = ref('')
+const hanko = useHanko()
+
+onMounted(async () => {
+  try {
+    const user = await hanko?.user.getCurrent()
+    userEmail.value = user?.email || ''
+  } catch (error) {
+    console.error('Error fetching user:', error)
+  } finally {
+    loading.value = false
+  }
+})
+
+async function logout() {
+  try {
+    await hanko?.user.logout()
+    router.push('/login')
+  } catch (error) {
+    console.error('Error during logout:', error)
+  }
+}
+
+
+</script>
+
 <template>
   <v-container>
     <v-row>
@@ -37,41 +79,3 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
-defineOptions({
-  ssr: false
-})
-
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useHanko } from '#imports'
-
-const router = useRouter()
-const loading = ref(true)
-const userEmail = ref('')
-const hanko = useHanko()
-
-onMounted(async () => {
-  try {
-    const user = await hanko?.user.getCurrent()
-    userEmail.value = user?.email || ''
-  } catch (error) {
-    console.error('Error fetching user:', error)
-  } finally {
-    loading.value = false
-  }
-})
-
-async function logout() {
-  try {
-    await hanko?.user.logout()
-    router.push('/login')
-  } catch (error) {
-    console.error('Error during logout:', error)
-  }
-}
-
-definePageMeta({
-  middleware: ['hanko-logged-in']
-})
-</script>

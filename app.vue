@@ -14,7 +14,7 @@
       </v-btn>
     </v-app-bar> -->
 
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-if="$route.path !== '/login'"
       v-model="leftDrawer"
       location="left"
@@ -37,9 +37,9 @@
           to="/settings"
         ></v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-if="$route.path !== '/login'"
       v-model="rightDrawer"
       location="right"
@@ -55,7 +55,7 @@
           prepend-icon="mdi-bell"
         ></v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
     <v-main>
       <v-container>

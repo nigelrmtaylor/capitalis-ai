@@ -27,6 +27,10 @@
 import { useRouter } from 'nuxt/app'
 import { useRuntimeConfig } from '#app'
 
+definePageMeta({
+  middleware: ['hanko-logged-out'],
+})
+
 defineOptions({
   ssr: false
 })

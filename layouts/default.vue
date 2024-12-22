@@ -1,19 +1,33 @@
-<template>
-  <v-app >
-    <v-app-bar v-if="$route.path !== '/login'" color="primary">
-      <v-app-bar-nav-icon @click="leftDrawer = !leftDrawer"></v-app-bar-nav-icon>
-      <v-app-bar-title>Capitalis AI</v-app-bar-title>
-      <v-spacer></v-spacer>
-      <ClientOnly>
-        <v-btn v-if="isAuthenticated" @click="logout" prepend-icon="mdi-logout">
-          Logout
-        </v-btn>
-      </ClientOnly>
-      <v-btn icon @click="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
 
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useHanko } from '#imports'
+
+const router = useRouter()
+const hanko = useHanko()
+const isAuthenticated = computed(() => !!hanko?.session.get())
+const leftDrawer = ref(false)
+const rightDrawer = ref(false)
+
+async function logout() {
+  try {
+    await hanko?.user.logout()
+    router.push('/login')
+  } catch (error) {
+    console.error('Error during logout:', error)
+  }
+}
+</script>
+
+
+<template>
+  <v-app>
+    <AppBar
+      v-if="$route.path !== '/login'"
+      v-model:leftDrawer="leftDrawer"
+      v-model:rightDrawer="rightDrawer"
+    />
 
     <v-navigation-drawer
       v-if="$route.path !== '/login'"
@@ -57,15 +71,10 @@
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
-
     
-    <slot />
+    <v-main>
+      <slot />
+    </v-main>
     <AppFooter />
   </v-app>
 </template>
-
-<script setup lang="ts">
-// The footer component will be auto-imported by Nuxt
-const leftDrawer: Ref<boolean> = ref(false)
-  const rightDrawer: Ref<boolean> = ref(false)
-</script>

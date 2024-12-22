@@ -60,13 +60,14 @@ const config = defineNuxtConfig({
   },
   hanko: {
     // You need to provide the Hanko API URL in order for it to work
-    cookieName: 'hanko',
-    redirects: {
-      login: '/login', // this is the default
-      home: '/', // this is the default
-      success: '/user', // this is a custom redirect
-      followRedirect: true, // this can be set to false to always redirect to the success page
-    },
+    apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL,
+    // cookieName: 'hanko',
+    // redirects: {
+    //   login: '/login', // this is the default
+    //   home: '/', // this is the default
+    //   success: '/user', // this is a custom redirect
+    //   followRedirect: true, // this can be set to false to always redirect to the success page
+    // },
   },
   app: {
     baseURL: '/',
