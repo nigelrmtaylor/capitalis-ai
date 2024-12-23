@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Kubernetes secrets
+k8s/*-secrets.yaml
+k8s/secrets/
