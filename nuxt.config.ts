@@ -16,7 +16,6 @@ const config = defineNuxtConfig({
     transpile: ['vuetify'],
   },
   modules: [
-    '@vite-pwa/nuxt',
     ['@nigelrmtaylor/hanko-nuxt-module', {
       apiURL: ''
     }],
@@ -77,6 +76,9 @@ const config = defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
       ]
     }
   },
