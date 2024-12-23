@@ -181,7 +181,10 @@ const config = defineNuxtConfig({
       }
     },
     plugins: [
-      (await import('./plugins/vite-path-normalize')).default()
+      async () => {
+        const normalizePlugin = await import('./plugins/vite-path-normalize')
+        return normalizePlugin.default()
+      }
     ],
     server: {
       hmr: {
