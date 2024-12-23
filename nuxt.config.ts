@@ -19,7 +19,8 @@ const config = defineNuxtConfig({
     ['@nigelrmtaylor/hanko-nuxt-module', {
       apiURL: ''
     }],
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    '@vite-pwa/nuxt'
   ],
   apollo: {
     clients: {
@@ -27,59 +28,6 @@ const config = defineNuxtConfig({
         httpEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
         wsEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
       }
-    }
-  },
-  runtimeConfig: {
-    public: {
-      hankoApiUrl: '',
-      graphqlUrl: '',
-      graphqlWsUrl: '',
-      notificationServerUrl: '',
-      oneSignalRestApiKey: ''
-    }
-  },
-  devServer: {
-  },
-  nitro: {
-    logLevel: 'debug',
-    debug: true,
-    routeRules: {
-      '/**': { cors: true }
-    },
-    prerender: {
-      crawlLinks: true,
-      routes: ['/']
-    },
-    publicAssets: [
-      {
-        dir: 'public',
-        baseURL: '/'
-      }
-    ]
-  },
-  hanko: {
-    // You need to provide the Hanko API URL in order for it to work
-    apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL,
-    // cookieName: 'hanko',
-    // redirects: {
-    //   login: '/login', // this is the default
-    //   home: '/', // this is the default
-    //   success: '/user', // this is a custom redirect
-    //   followRedirect: true, // this can be set to false to always redirect to the success page
-    // },
-  },
-  app: {
-    baseURL: '/',
-    buildAssetsDir: '/_nuxt/',
-    head: {
-      title: 'Capitalis AI',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ],
-      link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
-      ]
     }
   },
   pwa: {
@@ -167,6 +115,59 @@ const config = defineNuxtConfig({
       enabled: true,
       suppressWarnings: true,
       type: 'module'
+    }
+  },
+  runtimeConfig: {
+    public: {
+      hankoApiUrl: '',
+      graphqlUrl: '',
+      graphqlWsUrl: '',
+      notificationServerUrl: '',
+      oneSignalRestApiKey: ''
+    }
+  },
+  devServer: {
+  },
+  nitro: {
+    logLevel: 'debug',
+    debug: true,
+    routeRules: {
+      '/**': { cors: true }
+    },
+    prerender: {
+      crawlLinks: true,
+      routes: ['/']
+    },
+    publicAssets: [
+      {
+        dir: 'public',
+        baseURL: '/'
+      }
+    ]
+  },
+  hanko: {
+    // You need to provide the Hanko API URL in order for it to work
+    apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL,
+    // cookieName: 'hanko',
+    // redirects: {
+    //   login: '/login', // this is the default
+    //   home: '/', // this is the default
+    //   success: '/user', // this is a custom redirect
+    //   followRedirect: true, // this can be set to false to always redirect to the success page
+    // },
+  },
+  app: {
+    baseURL: '/',
+    buildAssetsDir: '/_nuxt/',
+    head: {
+      title: 'Capitalis AI',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+      ]
     }
   },
   vite: {
