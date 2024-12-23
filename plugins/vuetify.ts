@@ -25,8 +25,8 @@ export default defineNuxtPlugin((app) => {
         light: {
           dark: false,
           colors: {
-            primary: '#1976D2',
-            secondary: '#424242',
+            primary: '#0D47A1', // blue-darken-4
+            secondary: '#E91E63', // pink
             accent: '#82B1FF',
             error: '#FF5252',
             info: '#2196F3',
@@ -37,8 +37,8 @@ export default defineNuxtPlugin((app) => {
         dark: {
           dark: true,
           colors: {
-            primary: '#2196F3',
-            secondary: '#424242',
+            primary: '#0D47A1', // blue-darken-4
+            secondary: '#E91E63', // pink
             accent: '#FF4081',
             error: '#FF5252',
             info: '#2196F3',

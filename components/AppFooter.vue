@@ -1,46 +1,46 @@
 <template>
-  <v-footer app class="bg-grey-lighten-1">
+  <v-footer app color="primary">
     <v-row no-gutters>
       <v-col cols="auto" class="mr-auto">
-        <span class="text-caption">&copy; {{ new Date().getFullYear() }} Capitalis AI</span>
+        <span class="text-caption text-white">&copy; {{ new Date().getFullYear() }} Capitalis AI</span>
       </v-col>
       
       <ClientOnly>
         <v-col cols="auto" class="px-4">
           <v-icon
-            :color="onlineStatus ? 'green' : 'red'"
+            :color="onlineStatus ? 'green-lighten-3' : 'red-lighten-3'"
             size="small"
             class="mr-1"
           >
             {{ onlineStatus ? 'mdi-cloud-check' : 'mdi-cloud-off-outline' }}
           </v-icon>
-          <span class="text-caption">{{ onlineStatus ? 'Online' : 'Offline' }}</span>
+          <span class="text-caption text-white">{{ onlineStatus ? 'Online' : 'Offline' }}</span>
         </v-col>
       </ClientOnly>
 
       <v-col cols="auto" class="px-4">
-        <v-icon size="small" color="blue" class="mr-1">mdi-clock-outline</v-icon>
-        <span class="text-caption">{{ currentTime }}</span>
+        <v-icon size="small" color="blue-lighten-3" class="mr-1">mdi-clock-outline</v-icon>
+        <span class="text-caption text-white">{{ currentTime }}</span>
       </v-col>
 
       <v-col cols="auto" class="px-4">
-        <v-icon size="small" color="orange" class="mr-1">mdi-memory</v-icon>
-        <span class="text-caption">{{ version }}</span>
+        <v-icon size="small" color="orange-lighten-3" class="mr-1">mdi-memory</v-icon>
+        <span class="text-caption text-white">{{ version }}</span>
       </v-col>
 
       <v-col cols="auto" class="px-4">
-        <v-icon size="small" color="purple" class="mr-1">mdi-monitor-screenshot</v-icon>
-        <span class="text-caption">{{ currentBreakpoint }}</span>
+        <v-icon size="small" color="purple-lighten-3" class="mr-1">mdi-monitor-screenshot</v-icon>
+        <span class="text-caption text-white">{{ currentBreakpoint }}</span>
       </v-col>
 
       <v-col cols="auto" class="px-4">
-        <v-icon size="small" color="blue" class="mr-1">mdi-source-commit</v-icon>
-        <span class="text-caption">{{ commitTime }}</span>
+        <v-icon size="small" color="blue-lighten-3" class="mr-1">mdi-source-commit</v-icon>
+        <span class="text-caption text-white">{{ commitTime }}</span>
       </v-col>
 
       <v-col cols="auto" class="px-4">
-        <v-icon size="small" color="green" class="mr-1">mdi-git</v-icon>
-        <span v-if="commitHash" class="text-caption">{{ commitHash.substring(0, 7) }}</span>
+        <v-icon size="small" color="green-lighten-3" class="mr-1">mdi-git</v-icon>
+        <span v-if="commitHash" class="text-caption text-white">{{ commitHash.substring(0, 7) }}</span>
       </v-col>
     </v-row>
   </v-footer>

@@ -25,8 +25,8 @@ async function logout() {
   <v-app>
     <AppBar
       v-if="$route.path !== '/login'"
-      v-model:leftDrawer="leftDrawer"
-      v-model:rightDrawer="rightDrawer"
+      v-model:left-drawer="leftDrawer"
+      v-model:right-drawer="rightDrawer"
     />
 
     <v-navigation-drawer
@@ -64,10 +64,28 @@ async function logout() {
         <v-list-item
           title="Profile"
           prepend-icon="mdi-account"
+          to="/profile"
         ></v-list-item>
         <v-list-item
           title="Notifications"
           prepend-icon="mdi-bell"
+          to="/notifications"
+        ></v-list-item>
+        <v-list-item
+          title="Account Settings"
+          prepend-icon="mdi-cog"
+          to="/account-settings"
+        ></v-list-item>
+        <v-divider></v-divider>
+        <v-list-item
+          title="Help & Support"
+          prepend-icon="mdi-help-circle"
+          to="/support"
+        ></v-list-item>
+        <v-list-item
+          title="Logout"
+          prepend-icon="mdi-logout"
+          @click="logout"
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
