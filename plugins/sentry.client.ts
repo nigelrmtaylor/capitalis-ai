@@ -3,34 +3,54 @@ import { defineNuxtPlugin, useRuntimeConfig } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
-  const app = nuxtApp.vueApp
+  const dsn = config.public.sentryDsn
 
-  // Initialize Sentry
+  console.log('Initializing Sentry with DSN:', dsn)
+
   Sentry.init({
-    app,
-    dsn: config.public.sentryDsn,
+    app: nuxtApp.vueApp,
+    dsn: dsn,
     integrations: [
       new Sentry.BrowserTracing({
-        // Set sampling rate for performance monitoring
-        tracingOrigins: ['localhost', 'capitalis.ai', /^\//],
+        tracingOrigins: ['localhost', 'my-site-url.com', /^\//],
       }),
-      new Sentry.Replay(),
     ],
-    // Performance Monitoring
-    tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-    // Session Replay
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
+    debug: true,
+    tracesSampleRate: 1.0,
     environment: process.env.NODE_ENV,
   })
 
-  // Register error handler
-  app.config.errorHandler = (error, instance, info) => {
+  // Send a test event
+  Sentry.captureMessage('Sentry initialization test', {
+    level: 'info',
+  })
+
+  nuxtApp.vueApp.mixin({
+    beforeCreate() {
+      const options = this.$options
+      if (options.name) {
+        Sentry.setTag('vue_component', options.name)
+      }
+    },
+  })
+
+  // Add error handler
+  nuxtApp.vueApp.config.errorHandler = (error, vm, info) => {
+    console.error('Vue error caught:', error)
     Sentry.captureException(error, {
       extra: {
-        componentName: instance?.$.type?.name,
+        componentName: vm?.$options?.name,
         info,
       },
     })
   }
+
+  // Add a test error after a short delay
+  setTimeout(() => {
+    try {
+      throw new Error('Test error from Sentry initialization')
+    } catch (error) {
+      Sentry.captureException(error)
+    }
+  }, 2000)
 })
