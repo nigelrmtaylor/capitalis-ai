@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
-import { register } from "@teamhanko/hanko-elements";
 const config = useRuntimeConfig()
 const hankoApi = config.public.hankoApiUrl;
 
@@ -17,13 +16,15 @@ const redirectAfterLogin = () => {
   router.push("/dashboard");
 };
 
-onMounted(() => {
-  register(hankoApi)
-    .catch((error) => {
-      console.log('register(hankoApi) error',error)
-
-      // handle error
-    });
+onMounted(async () => {
+  if (process.client) {
+    const { register } = await import('@teamhanko/hanko-elements');
+    register(hankoApi)
+      .catch((error) => {
+        console.log('register(hankoApi) error',error)
+        // handle error
+      });
+  }
 });
 </script>
 

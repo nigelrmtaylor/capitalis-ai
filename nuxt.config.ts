@@ -6,7 +6,7 @@ console.log('NUXT_PUBLIC_SENTRY_DSN:', process.env.NUXT_PUBLIC_SENTRY_DSN)
 console.log('========================')
 
 const config = defineNuxtConfig({
-  ssr: false,
+  ssr: true,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
   experimental: {
@@ -125,7 +125,7 @@ const config = defineNuxtConfig({
       graphqlWsUrl: '',
       notificationServerUrl: '',
       oneSignalRestApiKey: '',
-      sentryDsn: process.env.SENTRY_DSN || ''
+      sentryDsn: ''
     }
   },
   devServer: {

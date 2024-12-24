@@ -46,7 +46,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: capitalis-ai-test-secrets
-              key: SENTRY_DSN
+              key: NUXT_PUBLIC_SENTRY_DSN
         - name: VITE_COMMIT_TIME
           value: "2023-12-08T14:30:00Z"
         resources:
