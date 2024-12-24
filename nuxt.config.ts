@@ -1,9 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-process.stdout.write('\n=== Environment Configuration ===\n')
-process.stdout.write(`NUXT_PUBLIC_HANKO_API_URL: ${process.env.NUXT_PUBLIC_HANKO_API_URL}\n`)
-process.stdout.write(`NUXT_PUBLIC_SENTRY_DSN: ${process.env.NUXT_PUBLIC_SENTRY_DSN}\n`)
-process.stdout.write('========================\n')
+console.log('=== Environment Configuration ===')
+console.log('NUXT_PUBLIC_HANKO_API_URL:', process.env.NUXT_PUBLIC_HANKO_API_URL)
+console.log('NUXT_PUBLIC_SENTRY_DSN:', process.env.NUXT_PUBLIC_SENTRY_DSN)
+console.log('========================')
 
 const config = defineNuxtConfig({
   ssr: false,
