@@ -5,10 +5,10 @@ import { register } from "@teamhanko/hanko-elements";
 const config = useRuntimeConfig()
 const hankoApi = config.public.hankoApiUrl;
 
-console.log('=== Hanko Configuration ===')
-console.log('Initializing Hanko with API URL:', hankoApi)
-console.log('Environment:', process.env.NODE_ENV)
-console.log('========================')
+process.stdout.write('\n=== Hanko Configuration ===\n')
+process.stdout.write(`Initializing Hanko with API URL: ${hankoApi}\n`)
+process.stdout.write(`Environment: ${process.env.NODE_ENV}\n`)
+process.stdout.write('========================\n')
 
 const router = useRouter();
 

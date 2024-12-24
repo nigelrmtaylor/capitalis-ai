@@ -1,8 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-console.log('Environment variables during config initialization:')
-console.log('NUXT_PUBLIC_HANKO_API_URL:', process.env.NUXT_PUBLIC_HANKO_API_URL)
-console.log('All env:', process.env)
+process.stdout.write('\n=== Environment Configuration ===\n')
+process.stdout.write(`NUXT_PUBLIC_HANKO_API_URL: ${process.env.NUXT_PUBLIC_HANKO_API_URL}\n`)
+process.stdout.write(`NUXT_PUBLIC_SENTRY_DSN: ${process.env.NUXT_PUBLIC_SENTRY_DSN}\n`)
+process.stdout.write('========================\n')
 
 const config = defineNuxtConfig({
   ssr: false,
@@ -130,10 +131,9 @@ const config = defineNuxtConfig({
   devServer: {
   },
   nitro: {
-    logLevel: 'debug',
-    debug: true,
+    logLevel: 0, // Disable Nitro logging
     routeRules: {
-      '/**': { cors: true }
+      '/**': { cors: true, cache: { maxAge: 60 * 60 } }
     },
     prerender: {
       crawlLinks: true,

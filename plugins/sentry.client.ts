@@ -5,10 +5,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
   const dsn = config.public.sentryDsn
 
-  console.log('=== Sentry Configuration ===')
-  console.log('Initializing Sentry with DSN:', dsn)
-  console.log('Environment:', process.env.NODE_ENV)
-  console.log('========================')
+  // Use server-side logging
+  process.stdout.write('\n=== Sentry Configuration ===\n')
+  process.stdout.write(`Initializing Sentry with DSN: ${dsn}\n`)
+  process.stdout.write(`Environment: ${process.env.NODE_ENV}\n`)
+  process.stdout.write('========================\n')
 
   Sentry.init({
     app: nuxtApp.vueApp,
@@ -39,7 +40,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Add error handler
   nuxtApp.vueApp.config.errorHandler = (error, vm, info) => {
-    console.error('Vue error caught:', error)
+    process.stdout.write(`Vue error caught: ${error}\n`)
     Sentry.captureException(error, {
       extra: {
         componentName: vm?.$options?.name,
