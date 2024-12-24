@@ -3,7 +3,6 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { md3 } from 'vuetify/blueprints'
-import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 export default defineNuxtPlugin((app) => {

@@ -1,7 +1,8 @@
-const config = useRuntimeConfig()
-const NOTIFICATION_SERVER_URL = config.public.notificationServerUrl;
+const NOTIFICATION_SERVER_URL = '';
 
 export const useServerNotifications = () => {
+  const config = useRuntimeConfig()
+  const NOTIFICATION_SERVER_URL = config.public.notificationServerUrl;
   const { isSupported } = useNotifications();
   const subscription = ref<PushSubscription | null>(null);
   const userId = ref<string | null>(null); // You should implement proper user identification
@@ -50,9 +51,11 @@ export const useServerNotifications = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'User-ID': userId.value || 'anonymous'
         },
-        body: JSON.stringify(newSubscription)
+        body: JSON.stringify({
+          subscription: newSubscription,
+          userId: userId.value
+        }),
       });
 
       return newSubscription;
@@ -64,19 +67,24 @@ export const useServerNotifications = () => {
 
   const unsubscribe = async () => {
     try {
-      if (subscription.value) {
-        await subscription.value.unsubscribe();
-        
-        // Notify server
+      const registration = await navigator.serviceWorker.ready;
+      const existingSubscription = await registration.pushManager.getSubscription();
+
+      if (existingSubscription) {
+        await existingSubscription.unsubscribe();
+        subscription.value = null;
+
+        // Notify server about unsubscription
         await fetch(`${NOTIFICATION_SERVER_URL}/unsubscribe`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'User-ID': userId.value || 'anonymous'
-          }
+          },
+          body: JSON.stringify({
+            subscription: existingSubscription,
+            userId: userId.value
+          }),
         });
-        
-        subscription.value = null;
       }
     } catch (error) {
       console.error('Error unsubscribing from push notifications:', error);
@@ -84,34 +92,30 @@ export const useServerNotifications = () => {
     }
   };
 
-  const sendNotification = async (title: string, options: { body: string, icon?: string, data?: any }) => {
+  const sendNotification = async (title: string, options: NotificationOptions = {}) => {
     try {
-      const response = await fetch(`${NOTIFICATION_SERVER_URL}/send-notification`, {
+      if (!subscription.value) {
+        throw new Error('No active subscription');
+      }
+
+      await fetch(`${NOTIFICATION_SERVER_URL}/send-notification`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'User-ID': userId.value || 'anonymous'
         },
         body: JSON.stringify({
-          userId: userId.value,
-          title,
-          ...options
-        })
+          subscription: subscription.value,
+          notification: {
+            title,
+            ...options
+          },
+          userId: userId.value
+        }),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to send notification');
-      }
-
-      return true;
     } catch (error) {
       console.error('Error sending notification:', error);
       throw error;
     }
-  };
-
-  const setUserId = (id: string) => {
-    userId.value = id;
   };
 
   return {
@@ -119,7 +123,6 @@ export const useServerNotifications = () => {
     subscribe,
     unsubscribe,
     sendNotification,
-    setUserId,
-    subscription
+    subscription: readonly(subscription)
   };
 };

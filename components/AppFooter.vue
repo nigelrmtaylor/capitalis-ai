@@ -8,13 +8,13 @@
       <ClientOnly>
         <v-col cols="auto" class="px-4">
           <v-icon
-            :color="onlineStatus ? 'green-lighten-3' : 'red-lighten-3'"
+            :color="isOnline ? 'green-lighten-3' : 'red-lighten-3'"
             size="small"
             class="mr-1"
           >
-            {{ onlineStatus ? 'mdi-cloud-check' : 'mdi-cloud-off-outline' }}
+            {{ isOnline ? 'mdi-cloud-check' : 'mdi-cloud-off-outline' }}
           </v-icon>
-          <span class="text-caption text-white">{{ onlineStatus ? 'Online' : 'Offline' }}</span>
+          <span class="text-caption text-white">{{ isOnline ? 'Online' : 'Offline' }}</span>
         </v-col>
       </ClientOnly>
 
@@ -53,31 +53,53 @@ import { useDisplay } from 'vuetify'
 
 const commitHash = import.meta.env.VITE_GIT_COMMIT || ''
 const version = ref('v1.0.0')
-const onlineStatus = ref(navigator.onLine)
-const currentTime = ref(new Date().toLocaleTimeString())
+const isOnline = ref(true)
+const currentTime = ref('')
 const commitTime = ref(import.meta.env.VITE_COMMIT_TIME || 'Unknown')
+const timeInterval = ref<NodeJS.Timer | null>(null)
 
 const { name: currentBreakpoint } = useDisplay()
 
 const updateOnlineStatus = () => {
-  onlineStatus.value = navigator.onLine
+  isOnline.value = navigator.onLine
 }
 
 const updateTime = () => {
-  currentTime.value = new Date().toLocaleTimeString()
+  if (process.client) {
+    currentTime.value = new Date().toLocaleTimeString()
+  }
 }
 
-let timeInterval: NodeJS.Timer
-
 onMounted(() => {
-  window.addEventListener('online', updateOnlineStatus)
-  window.addEventListener('offline', updateOnlineStatus)
-  timeInterval = setInterval(updateTime, 1000)
+  if (process.client) {
+    isOnline.value = navigator.onLine
+    
+    window.addEventListener('online', () => {
+      isOnline.value = true
+    })
+    
+    window.addEventListener('offline', () => {
+      isOnline.value = false
+    })
+
+    updateTime()
+    timeInterval.value = setInterval(updateTime, 1000)
+  }
 })
 
 onUnmounted(() => {
-  window.removeEventListener('online', updateOnlineStatus)
-  window.removeEventListener('offline', updateOnlineStatus)
-  clearInterval(timeInterval)
+  if (process.client) {
+    window.removeEventListener('online', () => {
+      isOnline.value = true
+    })
+    
+    window.removeEventListener('offline', () => {
+      isOnline.value = false
+    })
+
+    if (timeInterval.value) {
+      clearInterval(timeInterval.value)
+    }
+  }
 })
 </script>

@@ -1,3 +1,208 @@
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useHanko } from '#imports'
+import { useTheme } from 'vuetify'
+
+const router = useRouter()
+const hanko = useHanko()
+const theme = useTheme()
+const leftDrawer = defineModel('left-drawer', { type: Boolean })
+const rightDrawer = defineModel('right-drawer', { type: Boolean })
+const menu = ref(false)
+const themeMenu = ref(false)
+const showCopiedIcon = ref(false)
+const showCopiedAuthIcon = ref(false)
+const showSnackbar = ref(false)
+const showJwtDetails = ref(false)
+const decodedJwt = ref<any>(null)
+
+// These would typically come from your user store or auth service
+const userImage = ref<string | null>(null)
+const userName = ref<string>('')
+const userEmail = ref<string>('')
+
+// Get user email and name from Hanko
+onMounted(async () => {
+  console.log('APPBAR MOUNTED')
+  try {
+    const user = await hanko?.user.getCurrent()
+    console.log('APPBAR 1')
+    if (user) {
+      // Get email from user object
+      if (user.email) {
+        userEmail.value = user.email
+      }
+
+      // Get name from custom data
+      const session = hanko?.session.get()
+    console.log('Hanko Session:', session)
+      const response = await fetch(`${hanko?.api}/users/${user.id}`, {
+        headers: {
+          'Authorization': `Bearer ${session?.jwt}`
+        }
+      })
+      const userData = await response.json()
+      console.log('User Data:', userData);
+
+      if (userData.customData?.name) {
+        userName.value = userData.customData.name
+      } else {
+        // Fallback to email prefix if no name is set
+        userName.value = userEmail.value.split('@')[0]
+      }
+    }
+  } catch (error) {
+    console.error('Error getting user details:', error)
+  }
+})
+
+const copyJwtToken = async () => {
+  try {
+    const session = hanko?.session.get()
+    console.log('Hanko Session:', session)
+    
+    if (session?.jwt) {
+      await navigator.clipboard.writeText(session.jwt)
+      showCopiedIcon.value = true
+      showSnackbar.value = true
+      setTimeout(() => {
+        showCopiedIcon.value = false
+      }, 2000)
+    } else {
+      console.error('No JWT found in session:', session)
+    }
+  } catch (error) {
+    console.error('Error copying JWT token:', error)
+  }
+}
+
+const copyAuthHeader = async () => {
+  try {
+    const session = hanko?.session.get()
+    if (session?.jwt) {
+      const authHeader = {
+        Authorization: `Bearer ${session.jwt}`
+      }
+      await navigator.clipboard.writeText(JSON.stringify(authHeader, null, 2))
+      showCopiedAuthIcon.value = true
+      showSnackbar.value = true
+      setTimeout(() => {
+        showCopiedAuthIcon.value = false
+      }, 2000)
+    } else {
+      console.error('No JWT found in session:', session)
+    }
+  } catch (error) {
+    console.error('Error copying auth header:', error)
+  }
+}
+
+// Compute user initials from name
+const userInitials = computed(() => {
+  if (userName.value) {
+    // If we have a name, use the first letter of each word
+    return userName.value
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
+  } else if (userEmail.value) {
+    // Fallback to first two characters of email
+    return userEmail.value
+      .split('@')[0]
+      .slice(0, 2)
+      .toUpperCase()
+  }
+  return '??' // Default if no name or email
+})
+
+const handleLogout = async () => {
+  menu.value = false
+  try {
+    await hanko?.user.logout()
+    router.push('/login')
+  } catch (error) {
+    console.error('Error during logout:', error)
+  }
+}
+
+// Theme management
+const currentTheme = ref('system')
+const systemDark = ref(false)
+
+onMounted(() => {
+  if (process.client) {
+    // Initialize theme from localStorage
+    currentTheme.value = localStorage.getItem('theme') || 'system'
+    systemDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+    // Set up system theme change listener
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    mediaQuery.addEventListener('change', (e) => {
+      systemDark.value = e.matches
+      if (currentTheme.value === 'system') {
+        theme.global.name.value = e.matches ? 'dark' : 'light'
+      }
+    })
+
+    // Set initial theme
+    setTheme(currentTheme.value as 'light' | 'dark' | 'system')
+  }
+})
+
+const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
+  if (!process.client) return
+  
+  currentTheme.value = newTheme
+  localStorage.setItem('theme', newTheme)
+  
+  if (newTheme === 'system') {
+    theme.global.name.value = systemDark.value ? 'dark' : 'light'
+  } else {
+    theme.global.name.value = newTheme
+  }
+}
+
+const themeIcon = computed(() => {
+  switch (currentTheme.value) {
+    case 'light':
+      return 'mdi-white-balance-sunny'
+    case 'dark':
+      return 'mdi-moon-waning-crescent'
+    default:
+      return 'mdi-monitor'
+  }
+})
+
+// Watch for system theme changes when in system mode
+
+const decodeJwt = (token: string) => {
+  try {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
+      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    ).join(''))
+    return JSON.parse(jsonPayload)
+  } catch (error) {
+    console.error('Error decoding JWT:', error)
+    return null
+  }
+}
+
+watch(showJwtDetails, async (newValue) => {
+  if (newValue) {
+    const session = hanko?.session.get()
+    if (session?.jwt) {
+      decodedJwt.value = decodeJwt(session.jwt)
+    }
+  }
+})
+</script>
+
+
 <template>
   <v-app-bar
     color="primary"
@@ -263,192 +468,3 @@
   </v-dialog>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { useHanko } from '#imports'
-import { useTheme } from 'vuetify'
-
-const router = useRouter()
-const hanko = useHanko()
-const theme = useTheme()
-const leftDrawer = defineModel('left-drawer', { type: Boolean })
-const rightDrawer = defineModel('right-drawer', { type: Boolean })
-const menu = ref(false)
-const themeMenu = ref(false)
-const showCopiedIcon = ref(false)
-const showCopiedAuthIcon = ref(false)
-const showSnackbar = ref(false)
-const showJwtDetails = ref(false)
-const decodedJwt = ref<any>(null)
-
-// These would typically come from your user store or auth service
-const userImage = ref<string | null>(null)
-const userName = ref<string>('')
-const userEmail = ref<string>('')
-
-// Get user email and name from Hanko
-onMounted(async () => {
-  try {
-    const user = await hanko?.user.getCurrent()
-    if (user) {
-      // Get email from user object
-      if (user.email) {
-        userEmail.value = user.email
-      }
-
-      // Get name from custom data
-      const response = await fetch(`${hanko?.api}/users/${user.id}`, {
-        headers: {
-          'Authorization': `Bearer ${await hanko?.session.getToken()}`
-        }
-      })
-      const userData = await response.json()
-      if (userData.customData?.name) {
-        userName.value = userData.customData.name
-      } else {
-        // Fallback to email prefix if no name is set
-        userName.value = userEmail.value.split('@')[0]
-      }
-    }
-  } catch (error) {
-    console.error('Error getting user details:', error)
-  }
-})
-
-const copyJwtToken = async () => {
-  try {
-    const session = hanko?.session.get()
-    console.log('Hanko Session:', session)
-    
-    if (session?.jwt) {
-      await navigator.clipboard.writeText(session.jwt)
-      showCopiedIcon.value = true
-      showSnackbar.value = true
-      setTimeout(() => {
-        showCopiedIcon.value = false
-      }, 2000)
-    } else {
-      console.error('No JWT found in session:', session)
-    }
-  } catch (error) {
-    console.error('Error copying JWT token:', error)
-  }
-}
-
-const copyAuthHeader = async () => {
-  try {
-    const session = hanko?.session.get()
-    if (session?.jwt) {
-      const authHeader = {
-        Authorization: `Bearer ${session.jwt}`
-      }
-      await navigator.clipboard.writeText(JSON.stringify(authHeader, null, 2))
-      showCopiedAuthIcon.value = true
-      showSnackbar.value = true
-      setTimeout(() => {
-        showCopiedAuthIcon.value = false
-      }, 2000)
-    } else {
-      console.error('No JWT found in session:', session)
-    }
-  } catch (error) {
-    console.error('Error copying auth header:', error)
-  }
-}
-
-// Compute user initials from name
-const userInitials = computed(() => {
-  if (userName.value) {
-    // If we have a name, use the first letter of each word
-    return userName.value
-      .split(' ')
-      .map(word => word.charAt(0))
-      .join('')
-      .toUpperCase()
-      .slice(0, 2)
-  } else if (userEmail.value) {
-    // Fallback to first two characters of email
-    return userEmail.value
-      .split('@')[0]
-      .slice(0, 2)
-      .toUpperCase()
-  }
-  return '??' // Default if no name or email
-})
-
-const handleLogout = async () => {
-  menu.value = false
-  try {
-    await hanko?.user.logout()
-    router.push('/login')
-  } catch (error) {
-    console.error('Error during logout:', error)
-  }
-}
-
-// Theme management
-const currentTheme = ref(localStorage.getItem('theme') || 'system')
-
-const themeIcon = computed(() => {
-  switch (currentTheme.value) {
-    case 'light':
-      return 'mdi-white-balance-sunny'
-    case 'dark':
-      return 'mdi-moon-waning-crescent'
-    default:
-      return 'mdi-monitor'
-  }
-})
-
-const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
-  currentTheme.value = newTheme
-  localStorage.setItem('theme', newTheme)
-  
-  if (newTheme === 'system') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    theme.global.name.value = prefersDark ? 'dark' : 'light'
-  } else {
-    theme.global.name.value = newTheme
-  }
-  
-  themeMenu.value = false
-}
-
-// Watch for system theme changes when in system mode
-onMounted(() => {
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-  
-  mediaQuery.addEventListener('change', (e) => {
-    if (currentTheme.value === 'system') {
-      theme.global.name.value = e.matches ? 'dark' : 'light'
-    }
-  })
-
-  // Set initial theme
-  setTheme(currentTheme.value as 'light' | 'dark' | 'system')
-})
-
-const decodeJwt = (token: string) => {
-  try {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
-      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-    ).join(''))
-    return JSON.parse(jsonPayload)
-  } catch (error) {
-    console.error('Error decoding JWT:', error)
-    return null
-  }
-}
-
-watch(showJwtDetails, async (newValue) => {
-  if (newValue) {
-    const session = hanko?.session.get()
-    if (session?.jwt) {
-      decodedJwt.value = decodeJwt(session.jwt)
-    }
-  }
-})
-</script>

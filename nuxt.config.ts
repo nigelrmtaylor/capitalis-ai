@@ -12,7 +12,10 @@ const config = defineNuxtConfig({
   experimental: {
     payloadExtraction: false
   },
-  css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css'],
+  css: [
+    'vuetify/styles',
+    '@mdi/font/css/materialdesignicons.css'
+  ],
   build: {
     transpile: ['vuetify'],
   },
@@ -29,93 +32,6 @@ const config = defineNuxtConfig({
         httpEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
         wsEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
       }
-    }
-  },
-  pwa: {
-    registerType: 'autoUpdate',
-    strategies: 'generateSW',
-    manifest: {
-      name: 'Capitalis AI App',
-      short_name: 'Capitalis',
-      description: 'Capitalis AI Application',
-      theme_color: '#ffffff',
-      icons: [
-        {
-          src: 'icon.png',
-          sizes: '512x512',
-          type: 'image/png'
-        }
-      ],
-      display: 'standalone',
-      background_color: '#ffffff',
-      start_url: '/',
-      scope: '/',
-      orientation: 'portrait',
-      categories: ['business', 'finance']
-    },
-    workbox: {
-      navigateFallback: '/',
-      globDirectory: '.output/public',
-      globPatterns: [
-        '**/*.{js,css,html,ico,png,svg}',
-        '_nuxt/**/*'
-      ],
-      globIgnores: [
-        '**/OneSignalSDKWorker.js',
-        '**/node_modules/**',
-        'sw.js',
-        'workbox-*.js'
-      ],
-      modifyURLPrefix: {
-        '/_nuxt/Users/NigelTaylor/GitHub/CascadeProjects/windsurf-project/capitalis-ai-app/node_modules/nuxt/dist/app/': '/_nuxt/'
-      },
-      runtimeCaching: [
-        {
-          urlPattern: '/',
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'pages'
-          }
-        },
-        {
-          urlPattern: ({ url }) => {
-            const path = url.pathname;
-            // Remove absolute path if present
-            const normalizedPath = path.replace(/.*\/_nuxt\//, '/_nuxt/');
-            return normalizedPath.startsWith('/_nuxt/');
-          },
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'nuxt-assets',
-            expiration: {
-              maxEntries: 200,
-              maxAgeSeconds: 24 * 60 * 60
-            },
-            matchOptions: {
-              ignoreSearch: true
-            }
-          }
-        },
-        {
-          urlPattern: /^https:\/\/cdn\.onesignal\.com\/.*/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'onesignal-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 30
-            }
-          }
-        }
-      ]
-    },
-    client: {
-      installPrompt: true
-    },
-    devOptions: {
-      enabled: true,
-      suppressWarnings: true,
-      type: 'module'
     }
   },
   runtimeConfig: {
@@ -135,10 +51,11 @@ const config = defineNuxtConfig({
     routeRules: {
       '/**': { cors: true, cache: { maxAge: 60 * 60 } }
     },
-    prerender: {
-      crawlLinks: true,
-      routes: ['/']
-    },
+    // Temporarily disable prerender
+    // prerender: {
+    //   crawlLinks: true,
+    //   routes: ['/']
+    // },
     publicAssets: [
       {
         dir: 'public',
@@ -172,22 +89,12 @@ const config = defineNuxtConfig({
     }
   },
   vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          entryFileNames: '_nuxt/[name].js',
-          chunkFileNames: '_nuxt/[name].js',
-          assetFileNames: '_nuxt/[name][extname]'
-        }
-      }
+    define: {
+      'process.env.DEBUG': false,
     },
-    plugins: [
-      (await import('./plugins/vite-path-normalize')).default()
-    ],
-    server: {
-      hmr: {
-        port: 3000,
-        host: '0.0.0.0'
+    resolve: {
+      alias: {
+        'tslib': 'tslib/tslib.js'
       }
     }
   },

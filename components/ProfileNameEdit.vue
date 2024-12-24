@@ -56,12 +56,15 @@ const nameRules = [
 onMounted(async () => {
   loading.value = true
   try {
+    const session = hanko?.session.get()
+    console.log('Hanko Session:', session)
+
     const user = await hanko?.user.getCurrent()
     if (user) {
       // Make API call to get user details including custom data
       const response = await fetch(`${hanko?.api}/users/${user.id}`, {
         headers: {
-          'Authorization': `Bearer ${await hanko?.session.getToken()}`
+          'Authorization': `Bearer ${session?.jwt}`
         }
       })
       const userData = await response.json()
@@ -94,13 +97,16 @@ const saveName = async () => {
 
   loading.value = true
   try {
+    const session = hanko?.session.get()
+    console.log('Hanko Session:', session)
+
     const user = await hanko?.user.getCurrent()
     if (user) {
       // Update user's custom data with the name
       const response = await fetch(`${hanko?.api}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${await hanko?.session.getToken()}`,
+          'Authorization': `Bearer ${session?.jwt}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

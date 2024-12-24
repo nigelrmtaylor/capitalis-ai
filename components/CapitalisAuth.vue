@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { onMounted } from "vue";
-const config = useRuntimeConfig()
-const hankoApi = config.public.hankoApiUrl;
-
-console.log('=== Hanko Configuration ===')
-console.log('Initializing Hanko with API URL:', hankoApi)
-console.log('Environment:', process.env.NODE_ENV)
-console.log('========================')
+import { onMounted, ref } from "vue";
 
 const router = useRouter();
+const config = useRuntimeConfig();
+const hankoApi = ref(config.public.hankoApiUrl);
+
+console.log('=== Hanko Configuration ===')
+console.log('Initializing Hanko with API URL:', hankoApi.value)
+console.log('Environment:', process.env.NODE_ENV)
+console.log('========================')
 
 const redirectAfterLogin = () => {
   // successfully logged in, redirect to a page in your application
@@ -19,7 +19,7 @@ const redirectAfterLogin = () => {
 onMounted(async () => {
   if (process.client) {
     const { register } = await import('@teamhanko/hanko-elements');
-    register(hankoApi)
+    register(hankoApi.value)
       .catch((error) => {
         console.log('register(hankoApi) error',error)
         // handle error

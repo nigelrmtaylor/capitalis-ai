@@ -23,11 +23,13 @@ async function logout() {
 
 <template>
   <v-app>
-    <AppBar
-      v-if="$route.path !== '/login'"
-      v-model:left-drawer="leftDrawer"
-      v-model:right-drawer="rightDrawer"
-    />
+    <ClientOnly>
+      <AppBar
+        v-if="$route.path !== '/login'"
+        v-model:left-drawer="leftDrawer"
+        v-model:right-drawer="rightDrawer"
+      />
+    </ClientOnly>
 
     <v-navigation-drawer
       v-if="$route.path !== '/login'"
@@ -93,6 +95,8 @@ async function logout() {
     <v-main>
       <slot />
     </v-main>
-    <AppFooter />
+    <ClientOnly>
+      <AppFooter v-if="$route.path !== '/login'" />
+    </ClientOnly>
   </v-app>
 </template>
