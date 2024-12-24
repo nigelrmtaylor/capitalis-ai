@@ -5,7 +5,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
   const dsn = config.public.sentryDsn
 
+  console.log('=== Sentry Configuration ===')
   console.log('Initializing Sentry with DSN:', dsn)
+  console.log('Environment:', process.env.NODE_ENV)
+  console.log('========================')
 
   Sentry.init({
     app: nuxtApp.vueApp,
