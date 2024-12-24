@@ -42,6 +42,11 @@ spec:
             secretKeyRef:
               name: capitalis-ai-test-secrets
               key: NUXT_PUBLIC_HANKO_API_URL
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: capitalis-ai-test-secrets
+              key: SENTRY_DSN
         - name: VITE_COMMIT_TIME
           value: "2023-12-08T14:30:00Z"
         resources:

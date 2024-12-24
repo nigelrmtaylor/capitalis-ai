@@ -20,7 +20,8 @@ const config = defineNuxtConfig({
       apiURL: ''
     }],
     '@nuxtjs/apollo',
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    '@nuxtjs/sentry'
   ],
   apollo: {
     clients: {
@@ -123,7 +124,21 @@ const config = defineNuxtConfig({
       graphqlUrl: '',
       graphqlWsUrl: '',
       notificationServerUrl: '',
-      oneSignalRestApiKey: ''
+      oneSignalRestApiKey: '',
+      sentryDsn: process.env.SENTRY_DSN || ''
+    }
+  },
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+    config: {
+      environment: process.env.NODE_ENV,
+      tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
+    },
+    serverConfig: {
+      // Configure server-specific options
+      tracesSampleRate: 0.1,
     }
   },
   devServer: {
