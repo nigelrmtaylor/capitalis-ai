@@ -28,7 +28,7 @@ const config = defineNuxtConfig({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
       filename: 'sw.js',
-      includeAssets: ['/favicon.svg', '/icons/*'],
+      includeAssets: ['favicon.svg', 'icons/*'],
       manifest: {
         name: 'Capitalis AI',
         short_name: 'Capitalis',
@@ -41,13 +41,13 @@ const config = defineNuxtConfig({
         start_url: '/',
         icons: [
           {
-            src: '/icons/icon-192x192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/icons/icon-512x512.png',
+            src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
@@ -116,15 +116,11 @@ const config = defineNuxtConfig({
         { name: 'theme-color', content: '#ffffff' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
-        { name: 'apple-mobile-web-app-title', content: 'Capitalis AI' },
-        { name: 'mobile-web-app-capable', content: 'yes' }
+        { name: 'apple-mobile-web-app-title', content: 'Capitalis AI' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-        { rel: 'apple-touch-icon', sizes: '180x180', href: '/icons/apple-touch-icon.png' },
-        { rel: 'apple-touch-icon', sizes: '152x152', href: '/icons/apple-touch-icon-152x152.png' },
-        { rel: 'apple-touch-icon', sizes: '120x120', href: '/icons/apple-touch-icon-120x120.png' },
-        { rel: 'apple-touch-icon', sizes: '76x76', href: '/icons/apple-touch-icon-76x76.png' }
+        { rel: 'icon', type: 'image/svg+xml', href: 'favicon.svg' },
+        { rel: 'apple-touch-icon', href: 'icons/apple-touch-icon.png' }
       ]
     }
   },
