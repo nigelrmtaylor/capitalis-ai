@@ -24,7 +24,25 @@ const config = defineNuxtConfig({
       apiURL: ''
     }],
     '@nuxtjs/apollo',
-    '@vite-pwa/nuxt'
+    ['@vite-pwa/nuxt', {
+      /* PWA config will be imported from pwa.config.ts */
+      registerType: 'autoUpdate',
+      strategies: 'generateSW',
+      filename: 'sw.js',
+      manifest: {
+        name: 'Capitalis AI',
+        short_name: 'Capitalis',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: 'icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ]
+      }
+    }]
   ],
   apollo: {
     clients: {
@@ -81,10 +99,16 @@ const config = defineNuxtConfig({
       title: 'Capitalis AI',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'theme-color', content: '#ffffff' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'apple-mobile-web-app-title', content: 'Capitalis AI' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
+        { rel: 'mask-icon', href: '/icons/safari-pinned-tab.svg', color: '#ffffff' }
       ]
     }
   },
