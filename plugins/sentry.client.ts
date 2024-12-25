@@ -43,13 +43,4 @@ export default defineNuxtPlugin((nuxtApp) => {
       },
     })
   }
-
-  // Add a test error after a short delay
-  setTimeout(() => {
-    try {
-      throw new Error('Test error from Sentry initialization')
-    } catch (error) {
-      Sentry.captureException(error)
-    }
-  }, 2000)
 })
