@@ -10,12 +10,10 @@ export async function sendNotification(title: string, message: string, options: 
   }
 
   // Request permission if not already granted
-  if (Notification.permission !== 'granted') {
-    const permitted = await requestPermission()
-    if (!permitted) {
-      console.warn('Notification permission was denied')
-      return false
-    }
+  const permitted = await requestPermission()
+  if (!permitted) {
+    console.warn('Notification permission was denied')
+    return false
   }
 
   // Send the notification
@@ -34,22 +32,20 @@ export async function sendNotification(title: string, message: string, options: 
 // Predefined notification types
 export function sendSuccessNotification(message: string) {
   return sendNotification('Success', message, {
-    icon: '/success-icon.png', // Make sure to have this icon
-    vibrate: [200, 100, 200]
+    icon: '/success-icon.png',
+    requireInteraction: false
   })
 }
 
 export function sendErrorNotification(message: string) {
   return sendNotification('Error', message, {
-    icon: '/error-icon.png', // Make sure to have this icon
-    vibrate: [300, 100, 300]
+    icon: '/error-icon.png'
   })
 }
 
 export function sendAlertNotification(message: string) {
   return sendNotification('Alert', message, {
-    icon: '/alert-icon.png', // Make sure to have this icon
-    vibrate: [100, 50, 100],
+    icon: '/alert-icon.png',
     requireInteraction: true
   })
 }

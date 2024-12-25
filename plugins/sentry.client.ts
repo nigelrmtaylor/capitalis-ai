@@ -24,11 +24,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     environment: process.env.NODE_ENV,
   })
 
-  // Send a test event
-  Sentry.captureMessage('Sentry initialization test', {
-    level: 'info',
-  })
-
   nuxtApp.vueApp.mixin({
     beforeCreate() {
       const options = this.$options
