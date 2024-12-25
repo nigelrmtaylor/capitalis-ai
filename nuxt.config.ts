@@ -28,7 +28,7 @@ const config = defineNuxtConfig({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
       filename: 'sw.js',
-      includeAssets: ['favicon.svg', 'icons/*'],
+      includeAssets: ['icon-source.svg', 'favicon.svg', 'icons/*'],
       manifest: {
         name: 'Capitalis AI',
         short_name: 'Capitalis',
@@ -41,18 +41,24 @@ const config = defineNuxtConfig({
         start_url: '/',
         icons: [
           {
-            src: 'icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: 'icon-source.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
             purpose: 'any'
-          },
-          {
-            src: 'icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
           }
         ]
+      },
+      workbox: {
+        navigateFallback: '/',
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}']
+      },
+      client: {
+        installPrompt: true,
+      },
+      devOptions: {
+        enabled: true,
+        suppressWarnings: true,
+        type: 'module',
       }
     }]
   ],
