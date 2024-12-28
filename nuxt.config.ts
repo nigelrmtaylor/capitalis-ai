@@ -19,6 +19,40 @@ const config = defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  app: {
+    baseURL: '/',
+    buildAssetsDir: '/_nuxt/',
+    head: {
+      title: 'Capitalis AI',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
+        { name: 'format-detection', content: 'telephone=no' },
+        { name: 'theme-color', content: '#ffffff' },
+        // Apple PWA meta tags
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'apple-mobile-web-app-title', content: 'Capitalis AI' },
+        // Apple icon links
+        { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
+        { rel: 'apple-touch-icon', sizes: '152x152', href: '/icons/apple-touch-icon-152x152.png' },
+        { rel: 'apple-touch-icon', sizes: '167x167', href: '/icons/apple-touch-icon-167x167.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/icons/apple-touch-icon-180x180.png' },
+        { rel: 'apple-touch-icon', sizes: '120x120', href: '/icons/apple-touch-icon-120x120.png' },
+        // Apple splash screen images
+        { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-2048x2732.png', media: '(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)' },
+        { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1668x2224.png', media: '(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)' },
+        { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1536x2048.png', media: '(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)' },
+        { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1125x2436.png', media: '(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)' },
+        { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1242x2208.png', media: '(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)' },
+        { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-750x1334.png', media: '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/icons/icon.svg' },
+        { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' }
+      ]
+    }
+  },
   modules: [
     ['@nigelrmtaylor/hanko-nuxt-module', {
       apiURL: ''
@@ -28,7 +62,7 @@ const config = defineNuxtConfig({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
       filename: 'sw.js',
-      includeAssets: ['icon-source.svg', 'favicon.svg', 'icons/*'],
+      includeAssets: ['icons/*'],
       manifest: {
         name: 'Capitalis AI',
         short_name: 'Capitalis',
@@ -41,9 +75,57 @@ const config = defineNuxtConfig({
         start_url: '/',
         icons: [
           {
-            src: 'icon-source.svg',
+            src: '/icons/icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-72x72.png',
+            sizes: '72x72',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-96x96.png',
+            sizes: '96x96',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-128x128.png',
+            sizes: '128x128',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-144x144.png',
+            sizes: '144x144',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-152x152.png',
+            sizes: '152x152',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-384x384.png',
+            sizes: '384x384',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
             purpose: 'any'
           }
         ]
@@ -72,12 +154,12 @@ const config = defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      hankoApiUrl: '',
+      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
+      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN,
+      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY,
+      notificationServerUrl: '',
       graphqlUrl: '',
       graphqlWsUrl: '',
-      notificationServerUrl: '',
-      oneSignalRestApiKey: '',
-      sentryDsn: ''
     }
   },
   devServer: {
@@ -109,26 +191,6 @@ const config = defineNuxtConfig({
     //   success: '/user', // this is a custom redirect
     //   followRedirect: true, // this can be set to false to always redirect to the success page
     // },
-  },
-  app: {
-    baseURL: '/',
-    buildAssetsDir: '/_nuxt/',
-    head: {
-      title: 'Capitalis AI',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
-        { name: 'format-detection', content: 'telephone=no' },
-        { name: 'theme-color', content: '#ffffff' },
-        { name: 'apple-mobile-web-app-capable', content: 'yes' },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
-        { name: 'apple-mobile-web-app-title', content: 'Capitalis AI' }
-      ],
-      link: [
-        { rel: 'icon', type: 'image/svg+xml', href: 'favicon.svg' },
-        { rel: 'apple-touch-icon', href: 'icons/apple-touch-icon.png' }
-      ]
-    }
   },
   vite: {
     define: {

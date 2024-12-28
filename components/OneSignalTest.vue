@@ -42,9 +42,16 @@
 
         <button
           @click="sendTestNotification"
-          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-2"
         >
           Send Test Notification
+        </button>
+
+        <button
+          @click="sendToAll"
+          class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+        >
+          Send to All Users
         </button>
       </div>
     </div>
@@ -52,21 +59,39 @@
 </template>
 
 <script setup lang="ts">
-const { isSupported, isSubscribed, userId, requestPermission, sendNotification } = useOneSignal()
+import { ref } from 'vue'
+import { useNotifications } from '~/composables/useNotifications'
 
 const title = ref('')
 const message = ref('')
 const url = ref('')
 
-const sendTestNotification = async () => {
-  if (!title.value || !message.value) return
+const { isSupported, isSubscribed, userId, requestPermission, sendNotification, sendToAllUsers } = useNotifications()
 
-  const success = await sendNotification(title.value, message.value, url.value || undefined)
-  
-  if (success) {
+async function sendTestNotification() {
+  try {
+    await sendNotification(title.value, {
+      body: message.value,
+      url: url.value || undefined
+    })
     title.value = ''
     message.value = ''
     url.value = ''
+  } catch (error) {
+    console.error('Failed to send notification:', error)
+  }
+}
+
+async function sendToAll() {
+  try {
+    await sendToAllUsers(title.value, message.value, {
+      url: url.value || undefined
+    })
+    title.value = ''
+    message.value = ''
+    url.value = ''
+  } catch (error) {
+    console.error('Failed to send notification to all users:', error)
   }
 }
 </script>

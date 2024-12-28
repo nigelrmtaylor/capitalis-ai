@@ -44,6 +44,39 @@ export const useNotifications = () => {
     }
   }
 
+  const sendToAllUsers = async (title: string, message: string, options: any = {}) => {
+    const restApiKey = config.public.oneSignalRestApiKey
+    const appId = '217eb07a-530e-4fb0-b333-0a5b27bf16fd'
+
+    try {
+      const response = await fetch('https://onesignal.com/api/v1/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${restApiKey}`
+        },
+        body: JSON.stringify({
+          app_id: appId,
+          included_segments: ['Subscribed Users'],
+          headings: { en: title },
+          contents: { en: message },
+          url: options.url || window.location.origin,
+          chrome_web_icon: options.icon || '/icon.png',
+          firefox_icon: options.icon || '/icon.png'
+        })
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.errors?.[0] || 'Failed to send notification')
+      }
+      return result
+    } catch (error) {
+      console.error('Error sending notification to all users:', error)
+      throw error
+    }
+  }
+
   // Subscribe to notifications for a specific user
   const subscribeToUserNotifications = (userId: string) => {
     const { onResult, onError } = useSubscription(gql`
@@ -112,6 +145,7 @@ export const useNotifications = () => {
     isSupported,
     requestPermission,
     showNotification,
+    sendToAllUsers,
     subscribeToUserNotifications,
     subscribeToBroadcastNotifications,
     lastNotification

@@ -24,6 +24,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         window.OneSignal.init({
           appId,
           allowLocalhostAsSecureOrigin: true,
+          serviceWorkerPath: '/OneSignalSDKWorker.js',
+          serviceWorkerParam: { scope: '/' },
           welcomeNotification: {
             disable: false
           },
