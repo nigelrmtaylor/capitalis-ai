@@ -62,7 +62,7 @@ const checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: process.env.JWKS_URI,
   }),
-  audience: process.env.JWT_AUDIENCE,
+  audience: process.env.JWT_AUDIENCE.endsWith('/') ? process.env.JWT_AUDIENCE.slice(0, -1) : process.env.JWT_AUDIENCE,
   issuer: process.env.JWT_ISSUER,
   algorithms: ['RS256'],
 });
@@ -141,7 +141,7 @@ const handleAuthError = (err, req, res, next) => {
 app.use(express.json());
 
 // Apply JWT middleware to /graphql endpoint
-app.use('/graphql', checkJwt, logJwtInfo, handleAuthError);
+app.use('/graphql', logJwtInfo, checkJwt, handleAuthError);
 
 // Create and configure the server
 const serv = pgl.createServ(grafserv);

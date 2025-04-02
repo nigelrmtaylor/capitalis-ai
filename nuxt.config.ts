@@ -3,9 +3,22 @@
 console.log('=== Environment Configuration ===')
 console.log('NUXT_PUBLIC_HANKO_API_URL:', process.env.NUXT_PUBLIC_HANKO_API_URL)
 console.log('NUXT_PUBLIC_SENTRY_DSN:', process.env.NUXT_PUBLIC_SENTRY_DSN)
+console.log('Runtime Config will use:', {
+  hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
+})
 console.log('========================')
 
 const config = defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
+      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN,
+      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY,
+      notificationServerUrl: '',
+      graphqlUrl: '',
+      graphqlWsUrl: '',
+    }
+  },
   ssr: true,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
@@ -30,32 +43,30 @@ const config = defineNuxtConfig({
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#ffffff' },
         // Apple PWA meta tags
-        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
         { name: 'apple-mobile-web-app-title', content: 'Capitalis AI' },
-        // Apple icon links
+        // Apple splash screen images
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/icons/icon.svg' },
         { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
         { rel: 'apple-touch-icon', sizes: '152x152', href: '/icons/apple-touch-icon-152x152.png' },
         { rel: 'apple-touch-icon', sizes: '167x167', href: '/icons/apple-touch-icon-167x167.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/icons/apple-touch-icon-180x180.png' },
         { rel: 'apple-touch-icon', sizes: '120x120', href: '/icons/apple-touch-icon-120x120.png' },
-        // Apple splash screen images
         { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-2048x2732.png', media: '(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)' },
         { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1668x2224.png', media: '(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)' },
         { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1536x2048.png', media: '(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)' },
         { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1125x2436.png', media: '(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)' },
         { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-1242x2208.png', media: '(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)' },
         { rel: 'apple-touch-startup-image', href: '/icons/apple-splash-750x1334.png', media: '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)' },
-      ],
-      link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/icons/icon.svg' },
-        { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' }
       ]
     }
   },
   modules: [
-    ['@nigelrmtaylor/hanko-nuxt-module', {
-      apiURL: ''
+    ['@nuxtjs/hanko', {
+      apiURL: process.env.NUXT_PUBLIC_HANKO_API_URL || ''
     }],
     '@nuxtjs/apollo',
     ['@vite-pwa/nuxt', {
@@ -63,6 +74,13 @@ const config = defineNuxtConfig({
       strategies: 'generateSW',
       filename: 'sw.js',
       includeAssets: ['icons/*'],
+      workbox: {
+        navigateFallback: '/',
+        globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+        cleanupOutdatedCaches: true,
+        sourcemap: false,
+        disableDevLogs: true
+      },
       manifest: {
         name: 'Capitalis AI',
         short_name: 'Capitalis',
@@ -130,10 +148,6 @@ const config = defineNuxtConfig({
           }
         ]
       },
-      workbox: {
-        navigateFallback: '/',
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}']
-      },
       client: {
         installPrompt: true,
       },
@@ -150,16 +164,6 @@ const config = defineNuxtConfig({
         httpEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_URL || 'http://graphql-server.capitalis/graphql',
         wsEndpoint: process.env.NUXT_PUBLIC_GRAPHQL_WS_URL || 'ws://graphql-server.capitalis/graphql'
       }
-    }
-  },
-  runtimeConfig: {
-    public: {
-      hankoApiUrl: process.env.NUXT_PUBLIC_HANKO_API_URL,
-      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN,
-      oneSignalRestApiKey: process.env.NUXT_PUBLIC_ONESIGNAL_REST_API_KEY,
-      notificationServerUrl: '',
-      graphqlUrl: '',
-      graphqlWsUrl: '',
     }
   },
   devServer: {

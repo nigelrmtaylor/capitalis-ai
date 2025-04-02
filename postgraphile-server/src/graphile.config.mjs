@@ -5,7 +5,16 @@ import { pool } from './db.mjs';
 /** @type {GraphileConfig.Preset} */
 const preset = {
   extends: [PostGraphileAmberPreset],
-  grafserv: { port: 5678 },
+  
+  grafserv: { 
+    port: 5678,
+    graphiqlPath: '/graphiql',
+    graphiql: true,
+    graphiqlOnGraphQLGET: false
+  },
+  grafast: {
+    explain: true
+  },
   pgServices: [
     makePgService({
       pool,

@@ -8,12 +8,8 @@
               Sign in to Capitalis AI.
             </v-card-title>
             <v-card-text>
-              <div class="text-caption mb-4">
-                Hanko API URL: {{ hankoApiUrl }}
-              </div>
               <div style="height: 400px;">
                 <capitalis-auth @onAuthSuccess="afterLogin()" />
-
               </div>
             </v-card-text>
           </v-card>

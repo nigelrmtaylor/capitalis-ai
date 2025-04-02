@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgraphile-server
+  name: postgraphile-dev-server
   namespace: capitalis
   labels:
-    app: postgraphile-server
+    app: postgraphile-dev-server
   annotations:
     kubernetes.io/change-cause: "Update JWT environment variables"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgraphile-server
+      app: postgraphile-dev-server
   template:
     metadata:
       labels:
-        app: postgraphile-server
+        app: postgraphile-dev-server
     spec:
       containers:
-      - name: postgraphile-server
+      - name: postgraphile-dev-server
         image: nigelrmtaylor/capitalis-graphql:master
         imagePullPolicy: Always
         env:
@@ -39,6 +39,10 @@ spec:
               key: JWT_AUDIENCE
         - name: GRAPHILE_ENV
           value: development
+        - name: ENABLE_GRAPHIQL
+          value: "true"
+        - name: DEBUG
+          value: "@dataplan/pg:PgExecutor:verbose"
         ports:
         - containerPort: 5678
         livenessProbe:
