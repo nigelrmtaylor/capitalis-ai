@@ -26,3 +26,5 @@ logs
 # Kubernetes secrets
 k8s/*-secrets.yaml
 k8s/secrets/
+
+node_modules/
