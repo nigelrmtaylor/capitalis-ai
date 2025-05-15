@@ -1,16 +1,10 @@
 <template>
   <div>
-    <h2>Apollo Test</h2>
-    <div v-if="pending">Loading...</div>
-    <div v-else-if="error">Error: {{ error.message }}</div>
-    <div v-else>
-      Result: {{ data }}
-    </div>
+    <h2>Apollo Test (Removed)</h2>
+    <p>This component no longer uses Apollo. Placeholder for future testing.</p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { HELLO_QUERY } from '~/graphql/queries'
 
-const { data, pending, error } = useQuery(HELLO_QUERY)
 </script>

@@ -8,6 +8,16 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: capitalis-cors@kubernetescrd
     traefik.ingress.kubernetes.io/router.pathmatcher: path-prefix
 spec:
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: postgraphile-dev-server-ingress
+  namespace: capitalis
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: capitalis-cors@kubernetescrd
+    traefik.ingress.kubernetes.io/router.pathmatcher: path-prefix
+spec:
   ingressClassName: traefik
   rules:
   - host: dev.capitalis.app

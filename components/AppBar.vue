@@ -3,6 +3,17 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useHanko } from '#imports'
 import { useTheme } from 'vuetify'
+import { useSubscriptionIndicator } from '~/composables/useSubscriptionIndicator'
+
+// Setup for indicator
+const { indicatorColor } = useSubscriptionIndicator()
+
+interface HankoSessionWithJwt {
+  user_id: string
+  created_at: string
+  expires_at: string
+  jwt?: string
+}
 
 const router = useRouter()
 const hanko = useHanko()
@@ -16,6 +27,8 @@ const showCopiedAuthIcon = ref(false)
 const showSnackbar = ref(false)
 const showJwtDetails = ref(false)
 const decodedJwt = ref<any>(null)
+const jwtDebug = ref<string>("")
+const jwtError = ref<string>("")
 
 // These would typically come from your user store or auth service
 const userImage = ref<string | null>(null)
@@ -35,31 +48,44 @@ onMounted(async () => {
       }
 
       // Get name from custom data
-      const session = hanko?.session.get()
-    console.log('Hanko Session:', session)
-      const response = await fetch(`${hanko?.api}/users/${user.id}`, {
-        headers: {
-          'Authorization': `Bearer ${session?.jwt}`
-        }
-      })
-      const userData = await response.json()
-      console.log('User Data:', userData);
-
-      if (userData.customData?.name) {
-        userName.value = userData.customData.name
+      const session = hanko?.session as HankoSessionWithJwt | undefined
+      console.log('Hanko Session:', session)
+      jwtDebug.value = JSON.stringify(session, null, 2)
+      if (!session?.jwt) {
+        jwtError.value = 'No JWT found in Hanko session.'
+        console.warn('No JWT found in Hanko session:', session)
       } else {
-        // Fallback to email prefix if no name is set
-        userName.value = userEmail.value.split('@')[0]
+        jwtError.value = ''
+      }
+      try {
+        const response = await fetch(`${hanko?.api}/users/${user.id}`, {
+          headers: {
+            'Authorization': `Bearer ${session?.jwt}`
+          }
+        })
+        const userData = await response.json()
+        console.log('User Data:', userData);
+
+        if (userData.customData?.name) {
+          userName.value = userData.customData.name
+        } else {
+          // Fallback to email prefix if no name is set
+          userName.value = userEmail.value.split('@')[0]
+        }
+      } catch (apiError) {
+        jwtError.value = 'Failed to fetch user data with JWT.'
+        console.error('Error fetching user data with JWT:', apiError)
       }
     }
   } catch (error) {
+    jwtError.value = 'Error getting user details or session.'
     console.error('Error getting user details:', error)
   }
 })
 
 const copyJwtToken = async () => {
   try {
-    const session = hanko?.session.get()
+    const session = hanko?.session as HankoSessionWithJwt | undefined
     console.log('Hanko Session:', session)
     
     if (session?.jwt) {
@@ -79,14 +105,14 @@ const copyJwtToken = async () => {
 
 const copyAuthHeader = async () => {
   try {
-    const session = hanko?.session.get()
+    const session = hanko?.session as HankoSessionWithJwt | undefined
     if (session?.jwt) {
       const authHeader = {
         Authorization: `Bearer ${session.jwt}`
       }
       await navigator.clipboard.writeText(JSON.stringify(authHeader, null, 2))
       showCopiedAuthIcon.value = true
-      showSnackbar.value = true
+    showSnackbar.value = true
       setTimeout(() => {
         showCopiedAuthIcon.value = false
       }, 2000)
@@ -194,13 +220,24 @@ const decodeJwt = (token: string) => {
 
 watch(showJwtDetails, async (newValue) => {
   if (newValue) {
-    const session = hanko?.session.get()
+    const session = hanko?.session as HankoSessionWithJwt | undefined
     if (session?.jwt) {
-      decodedJwt.value = decodeJwt(session.jwt)
+      try {
+        decodedJwt.value = decodeJwt(session.jwt)
+        jwtError.value = ''
+      } catch (e) {
+        decodedJwt.value = null
+        jwtError.value = 'Failed to decode JWT.'
+        console.error('Failed to decode JWT:', e)
+      }
+    } else {
+      decodedJwt.value = null
+      jwtError.value = 'No JWT found in session when trying to decode.'
+      console.warn('No JWT found in session when trying to decode:', session)
     }
   }
 })
-</script>
+</script> 
 
 
 <template>
@@ -213,7 +250,9 @@ watch(showJwtDetails, async (newValue) => {
       <v-app-bar-nav-icon @click="leftDrawer = !leftDrawer"></v-app-bar-nav-icon>
     </template>
 
-    <v-app-bar-title>Capitalis AI</v-app-bar-title>
+    <v-app-bar-title>
+      <router-link to="/" class="appbar-title-link">Capitalis</router-link>
+    </v-app-bar-title>
 
     <v-spacer></v-spacer>
 
@@ -261,6 +300,11 @@ watch(showJwtDetails, async (newValue) => {
 
     <v-btn icon>
       <v-icon>mdi-bell</v-icon>
+    </v-btn>
+ 
+    <v-btn icon style="pointer-events: none;">
+    
+      <v-icon :color="indicatorColor === 'green' ? 'green' : 'grey'">mdi-message-processing</v-icon>
     </v-btn>
 
     <v-menu
@@ -416,6 +460,8 @@ watch(showJwtDetails, async (newValue) => {
   </v-snackbar>
 
   <v-dialog v-model="showJwtDetails" max-width="600">
+    <v-alert v-if="jwtError" type="warning" class="mb-2">{{ jwtError }}</v-alert>
+    <v-alert v-if="jwtDebug && !decodedJwt" type="info" class="mb-2">Session debug: <pre>{{ jwtDebug }}</pre></v-alert>
     <v-card>
       <v-card-title class="text-h5">
         JWT Token Details

@@ -1,0 +1,29 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-grafana
+  namespace: capitalis
+spec:
+  stripPrefix:
+    prefixes:
+      - /grafana
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-prometheus
+  namespace: capitalis
+spec:
+  stripPrefix:
+    prefixes:
+      - /prometheus
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-alertmanager
+  namespace: capitalis
+spec:
+  stripPrefix:
+    prefixes:
+      - /alertmanager

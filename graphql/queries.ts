@@ -1,7 +1,1 @@
-import gql from 'graphql-tag'
-
-export const HELLO_QUERY = gql`
-  query {
-    hello
-  }
-`
+// GraphQL queries removed. Placeholder for future use.

@@ -1,0 +1,12 @@
+# Connect to the PostgreSQL database using the postgres-util sidecar
+kubectl exec -n capitalis -it capitalis-db-0  -c postgres-util -- psql -U postgres 
+
+# port-forward to the capitalis-ai database
+POD_NAME=$(kubectl -n capitalis-ai get pods -l app=StackGresCluster  -l role=master -o name)
+kubectl --namespace capitalis-ai port-forward "$POD_NAME" 5432:5432
+
+# Connect to the PostgreSQL database using the postgres-util sidecar
+kubectl exec -n capitalis-ai -it capitalis-ai-db-0  -c postgres-util -- psql -U postgres 
+
+kubectl -n capitalis-ai get secret capitalis-ai-db-cluster --template '{{ printf "%s" (index .data "superuser-password" | base64decode) }}'
+

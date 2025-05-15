@@ -1,10 +1,11 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["hanko-logged-in"],
+  middleware: ["authenticated"],
 });
 </script>
 
 <template>
-Dashboard
-  <LogoutButton />
+  <div>
+    <h2>Account</h2>
+  </div>
 </template>

@@ -81,7 +81,7 @@ export default defineNuxtPlugin(() => {
         challenge: base64ToArrayBuffer(options.challenge),
         user: {
           ...options.user,
-          id: Uint8Array.from(options.user.id, c => c.charCodeAt(0)),
+          id: Uint8Array.from((options.user.id as string), c => c.charCodeAt(0)),
         },
       }
 

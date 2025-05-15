@@ -6,7 +6,7 @@ import { useHanko } from '#imports'
 
 const router = useRouter()
 const hanko = useHanko()
-const isAuthenticated = computed(() => !!hanko?.session.get())
+const isAuthenticated = computed(() => !!hanko?.session.isValid())
 const leftDrawer = ref(false)
 const rightDrawer = ref(false)
 
@@ -46,12 +46,13 @@ async function logout() {
         <v-list-item
           title="Dashboard"
           prepend-icon="mdi-view-dashboard"
-          to="/dashboard"
+          to="/authenticated/dashboard"
         ></v-list-item>
+
         <v-list-item
-          title="Settings"
+          title="Settingsqqq"
           prepend-icon="mdi-cog"
-          to="/settings"
+          to="/authenticated/settings"
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -76,7 +77,7 @@ async function logout() {
         <v-list-item
           title="Account Settings"
           prepend-icon="mdi-cog"
-          to="/account-settings"
+          to="/authenticated/settings"
         ></v-list-item>
         <v-divider></v-divider>
         <v-list-item
@@ -96,7 +97,7 @@ async function logout() {
       <slot />
     </v-main>
     <ClientOnly>
-      <AppFooter v-if="$route.path !== '/login'" />
+    qqqq  <AppFooter v-if="$route.path !== '/login'" />qqq
     </ClientOnly>
   </v-app>
 </template>

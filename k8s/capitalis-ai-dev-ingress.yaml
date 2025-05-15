@@ -5,8 +5,9 @@ metadata:
   namespace: capitalis
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+    traefik.ingress.kubernetes.io/router.entrypoints: "web,websecure"
     traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/websocket: "true"
 spec:
   ingressClassName: traefik
   tls:
@@ -17,10 +18,24 @@ spec:
   - host: dev.capitalis.app
     http:
       paths:
+      - path: /graphql
+        pathType: Exact
+        backend:
+          service:
+            name: postgraphile-dev-server
+            port:
+              number: 80
+      - path: /graphiql
+        pathType: Exact
+        backend:
+          service:
+            name: postgraphile-dev-server
+            port:
+              number: 80
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: nuxt-local
+            name: nt-laptop-endpoint
             port:
               number: 80

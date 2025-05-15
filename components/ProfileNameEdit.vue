@@ -56,7 +56,7 @@ const nameRules = [
 onMounted(async () => {
   loading.value = true
   try {
-    const session = hanko?.session.get()
+    const session = hanko?.session as { jwt?: string }
     console.log('Hanko Session:', session)
 
     const user = await hanko?.user.getCurrent()
@@ -97,7 +97,7 @@ const saveName = async () => {
 
   loading.value = true
   try {
-    const session = hanko?.session.get()
+    const session = hanko?.session as { jwt?: string }
     console.log('Hanko Session:', session)
 
     const user = await hanko?.user.getCurrent()

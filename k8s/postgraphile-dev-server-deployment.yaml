@@ -43,6 +43,8 @@ spec:
           value: "true"
         - name: DEBUG
           value: "@dataplan/pg:PgExecutor:verbose"
+        - name: KAFKA_BROKERS
+          value: my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
         ports:
         - containerPort: 5678
         livenessProbe:

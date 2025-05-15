@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: capitalis-ai-ddns-cronjob
+  namespace: capitalis
+spec:
+  schedule: "*/5 * * * *"  # Runs every 5 minutes
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600  # Automatically delete completed pods after 1 hour
+      template:
+        spec:
+          restartPolicy: Never
+          
+          containers:
+          - name: capitalis-ai-ddns-cronjob       
+            image: python:3.9-slim
+            command: ["/bin/sh", "-c"]
+            args:
+            - echo "Starting pip install..." && pip install requests && echo "pip install complete." && python /app/update_dns.py
+            volumeMounts:
+            - name: script-volume
+              mountPath: /app
+            env:
+            - name: GANDI_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: capitalis-ai-ddns-secret
+                  key: GANDI_API_TOKEN
+            - name: DOMAIN
+              value: "capitalis.app"    
+            - name: SUBDOMAINS
+              value: "test,dev,demo,grafana.dev,prometheus.dev,alertmanager.dev"
+          volumes:
+          - name: script-volume
+            configMap:
+              name: capitalis-ai-ddns-updater

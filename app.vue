@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="antialiased bg-white dark:bg-black dark:text-white font-sans min-h-screen text-black">
     <Head>
       <link rel="icon" type="image/svg+xml" href="/icon-source.svg" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
